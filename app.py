@@ -13,6 +13,15 @@ import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from matching_engine import load_organisations, match_organisations
 
+def _find(name):
+    """Find a data file whether it sits in data/ or next to app.py."""
+    here = os.path.dirname(os.path.abspath(__file__))
+    for p in (os.path.join(here, "data", name), os.path.join(here, name)):
+        if os.path.exists(p):
+            return p
+    return os.path.join(here, "data", name)
+
+
 st.set_page_config(
     page_title="NHS Mental Health Navigator",
     page_icon="🧭",
@@ -40,7 +49,7 @@ st.set_page_config(
 # illustrative and clearly marked as such throughout the app.
 # ─────────────────────────────────────────────────────────
 _rtt_real = pd.read_csv(
-    os.path.join(os.path.dirname(__file__), "data", "rtt_by_icb_real.csv")
+    _find("rtt_by_icb_real.csv")
 )
 
 # Illustrative MH wait per ICB — same 8 ICBs as the real physical
@@ -234,7 +243,7 @@ with tab3:
 
     if st.button("Show my matches", type="primary"):
         df_orgs = load_organisations(
-            os.path.join(os.path.dirname(__file__), "data", "organisations.csv")
+            _find("organisations.csv")
         )
         matches = match_organisations(df_orgs, q1, q2, q3, q4, q5)
 
