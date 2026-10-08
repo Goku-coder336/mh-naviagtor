@@ -10,8 +10,8 @@ import pandas as pd
 import plotly.express as px
 import sys, os
 
-sys.path.append(os.path.dirname(__file__))
-from scripts.matching_engine import load_organisations, match_organisations
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from matching_engine import load_organisations, match_organisations
 
 st.set_page_config(
     page_title="NHS Mental Health Navigator",
