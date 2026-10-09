@@ -208,8 +208,7 @@ with tab_wait:
         "🔵 Physical health waits are real, computed from the NHS England RTT "
         "March 2026 extract for all 42 integrated care boards (ICBs). "
         "🟡 Mental health waits by area are not yet connected, so none are shown "
-        "as fact. Not sure which ICB you are in? Search your postcode on "
-        "nhs.uk/service-search or ask your GP practice."
+        "as fact. Enter a postcode, or pick your area from the list."
     )
     _icbs = _rtt_real.copy()
     _icbs["Area"] = (
@@ -217,8 +216,55 @@ with tab_wait:
         .str.replace(" INTEGRATED CARE BOARD", "", regex=False).str.title()
     )
     _names = sorted(_icbs["Area"])
-    _default = next((i for i, n in enumerate(_names) if "Berkshire" in n), 0)
-    area = st.selectbox("Choose your NHS area (ICB)", _names, index=_default)
+    _bob = next((i for i, n in enumerate(_names) if "Berkshire" in n), 0)
+    _default = 0
+
+    # Postcode lookup (postcodes.io, free public service). It gives the local
+    # authority. Automatic matching to an NHS area is built for the pilot area
+    # only (Berkshire West, Oxfordshire, Buckinghamshire); elsewhere the
+    # person confirms their area in the box below.
+    _PILOT_LAS = {
+        "Reading", "West Berkshire", "Wokingham", "Oxford", "Cherwell",
+        "South Oxfordshire", "Vale of White Horse", "West Oxfordshire",
+        "Buckinghamshire",
+    }
+
+    @st.cache_data(ttl=3600, show_spinner=False)
+    def _lookup(pc):
+        import requests
+        try:
+            r = requests.get(
+                "https://api.postcodes.io/postcodes/" + pc.replace(" ", ""), timeout=6
+            )
+            if r.status_code == 200:
+                d = r.json()["result"]
+                return {"ok": True, "la": d.get("admin_district"), "country": d.get("country")}
+            if r.status_code == 404:
+                return {"ok": False, "reason": "notfound"}
+        except Exception:
+            pass
+        return {"ok": False, "reason": "unavailable"}
+
+    postcode = st.text_input("Your postcode (optional)", placeholder="e.g. RG1 7TN")
+    if postcode.strip():
+        res = _lookup(postcode.strip())
+        if res["ok"] and res["country"] != "England":
+            st.warning("Waiting-time data here covers NHS England only. Scotland, Wales and Northern Ireland run their own health services and are planned for later. The national organisations in Join in and Listen and learn, and the crisis lines above, work across the UK.")
+        elif res["ok"] and res["la"] in _PILOT_LAS:
+            _default = _bob
+            st.success(f"{postcode.upper()} is in {res['la']}. Showing your NHS area below.")
+        elif res["ok"]:
+            st.info(
+                f"{postcode.upper()} is in {res['la']}. Automatic matching to an NHS "
+                "area is only built for Berkshire West, Oxfordshire and "
+                "Buckinghamshire so far. Please choose your area below."
+            )
+        elif res["reason"] == "notfound":
+            st.warning("That postcode was not recognised. Check it, or choose your area below.")
+        else:
+            st.info("Postcode lookup is unavailable right now. Please choose your area below.")
+
+    area = st.selectbox("Your NHS area (ICB)", _names, index=_default)
     row = _icbs[_icbs["Area"] == area].iloc[0]
     _rank = int(_icbs["physical_health_wait_weeks"].rank(ascending=False, method="min")[row.name])
     m1, m2, m3 = st.columns(3)
@@ -456,6 +502,8 @@ not give medical advice or treatment.
 **Who built it** — Gokul Rajan, Reading UK. MSc Financial Technology
 (Distinction, University of Kent). Product design and data. Prototyped with AI
 coding tools. Not yet reviewed for clinical safety or accessibility.
+
+**Coverage** — waiting-time data covers NHS England (all 42 integrated care boards). Scotland, Wales and Northern Ireland have separate health services and are planned for later. Crisis lines and national charities listed work UK-wide.
 
 **Listings** — each shows its source and last-checked date. Support, groups and
 self-help entries link to the organisation's own page.
