@@ -203,62 +203,61 @@ with tab_listen:
 # TAB 1 — POSTCODE SEARCH / NAVIGATE
 # ─────────────────────────────────────────────────────────
 with tab_wait:
-    st.subheader("Find out how long the wait is near you")
+    st.subheader("Find out how long the wait is in your area")
     st.caption(
-        "🔵 Physical health figures below are real, computed from the NHS England RTT "
-        "March 2026 extract. 🟡 Mental health wait figures are illustrative placeholders "
-        "pending access to the NHS Talking Therapies monthly waiting-time file."
+        "🔵 Physical health waits are real, computed from the NHS England RTT "
+        "March 2026 extract for all 42 integrated care boards (ICBs). "
+        "🟡 Mental health waits by area are not yet connected, so none are shown "
+        "as fact. Not sure which ICB you are in? Search your postcode on "
+        "nhs.uk/service-search or ask your GP practice."
     )
-    col1, col2 = st.columns([1, 1])
-    with col1:
-        postcode = st.text_input("Your postcode", placeholder="e.g. RG1 2AB")
-    with col2:
-        condition = st.selectbox(
-            "What are you looking for support with?",
-            ["Anxiety or depression", "Trauma or PTSD", "OCD",
-             "Eating difficulties", "General mental health",
-             "Child or young person (CAMHS)", "Not sure"],
-        )
+    _icbs = _rtt_real.copy()
+    _icbs["Area"] = (
+        _icbs["icb_region"].str.replace("NHS ", "", n=1, regex=False)
+        .str.replace(" INTEGRATED CARE BOARD", "", regex=False).str.title()
+    )
+    _names = sorted(_icbs["Area"])
+    _default = next((i for i, n in enumerate(_names) if "Berkshire" in n), 0)
+    area = st.selectbox("Choose your NHS area (ICB)", _names, index=_default)
+    row = _icbs[_icbs["Area"] == area].iloc[0]
+    _rank = int(_icbs["physical_health_wait_weeks"].rank(ascending=False, method="min")[row.name])
+    m1, m2, m3 = st.columns(3)
+    m1.metric("Physical health wait (real)", f"{row['physical_health_wait_weeks']:.1f} weeks",
+              f"{row['physical_health_wait_weeks'] - REAL_NATIONAL_PHYSICAL_WAIT_WEEKS:+.1f} vs England",
+              delta_color="inverse")
+    m2.metric("People waiting (real)", f"{int(row['patients_waiting']):,}")
+    m3.metric("Mental health wait", "Not yet available")
+    st.caption(
+        f"{area} ranks {_rank} of {len(_icbs)} areas for longest physical health "
+        f"waits (1 = longest). Source: NHS England RTT, March 2026."
+    )
+    st.info(
+        "⏳ **Waiting for mental health support?** Open **Find support** and answer "
+        "five questions to get a waiting plan."
+    )
 
-    if st.button("Find services near me", type="primary"):
-        st.success(
-            f"Showing NHS Talking Therapies services for **{postcode or 'your area'}** "
-            f"— condition: **{condition}**. Sorted by shortest wait first."
-        )
-        shown = DEMO_TRUSTS.sort_values("MH wait (weeks)")
+    with st.expander("All 42 areas, real physical health waits"):
         st.dataframe(
-            shown, width="stretch", hide_index=True,
+            _icbs[["Area", "physical_health_wait_weeks", "patients_waiting"]]
+            .rename(columns={"physical_health_wait_weeks": "Physical wait (weeks)",
+                             "patients_waiting": "People waiting"})
+            .sort_values("Physical wait (weeks)", ascending=False),
+            width="stretch", hide_index=True,
         )
 
-        st.markdown("#### Mental health vs physical health wait — same areas, same NHS")
+    with st.expander("Illustrative comparison: mental vs physical health waits (placeholder data)"):
+        shown = DEMO_TRUSTS.sort_values("MH wait (weeks)")
+        st.caption("Mental health figures here are illustrative placeholders, not real data.")
         chart_df = shown.melt(
-            id_vars="Trust",
-            value_vars=["MH wait (weeks)", "Physical wait (weeks)"],
+            id_vars="Trust", value_vars=["MH wait (weeks)", "Physical wait (weeks)"],
             var_name="Type", value_name="Weeks",
         )
         fig = px.bar(
             chart_df, x="Trust", y="Weeks", color="Type", barmode="group",
-            color_discrete_map={
-                "MH wait (weeks)": "#e74c3c",
-                "Physical wait (weeks)": "#2ecc71",
-            },
+            color_discrete_map={"MH wait (weeks)": "#e74c3c", "Physical wait (weeks)": "#2ecc71"},
         )
         fig.update_layout(xaxis_tickangle=-35, height=420, legend_title="")
         st.plotly_chart(fig, width="stretch")
-
-        worst = shown.iloc[-1]
-        best = shown.iloc[0]
-        st.info(
-            f"**The gap:** the longest mental health wait shown here "
-            f"({worst['Trust']}, {worst['MH wait (weeks)']} weeks) is "
-            f"**{worst['MH wait (weeks)'] / best['MH wait (weeks)']:.1f}x longer** than the "
-            f"shortest ({best['Trust']}, {best['MH wait (weeks)']} weeks). "
-            f"Same NHS. Different postcode."
-        )
-        st.markdown(
-            "⏳ **Facing a long wait?** Open the **Find support** tab — "
-            "answer five questions and we'll match you to support available today."
-        )
 
     with st.expander("📋 Your rights while you wait — plain English"):
         st.markdown("""
