@@ -91,24 +91,118 @@ DEMO_TREND = pd.DataFrame({
 # ─────────────────────────────────────────────────────────
 # HEADER
 # ─────────────────────────────────────────────────────────
-st.title("NHS Mental Health & Economic Inactivity Navigator")
+st.title("Mental Health Navigator")
 st.caption(
-    "Free · Open source · 1.7 million people are waiting for NHS mental health "
-    "treatment. This tool helps you navigate the system — and shows the cost of it."
+    "A free, open-source navigation layer for people waiting for NHS mental health "
+    "support. Prevention is better than cure: find help, people and tools you can "
+    "use today."
+)
+st.error(
+    "**In crisis right now?** Call **Samaritans 116 123** (free, 24/7) · "
+    "text **SHOUT to 85258** · call **NHS 111, option 2** · in immediate danger, call **999**."
 )
 
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    "🔍 Find my wait time",
-    "🗺️ The postcode lottery",
-    "🤝 Get support now",
-    "📊 The economic cost",
+_resources = pd.read_csv(_find("resources.csv"))
+
+
+def show_resources(section):
+    """Render curated resources for a section, each with its source and check date."""
+    for _, r in _resources[_resources["section"] == section].iterrows():
+        with st.container(border=True):
+            st.markdown(f"### [{r['name']}]({r['url']})")
+            st.markdown(r["description"])
+            st.caption(
+                f"{r['cost']} · {r['format']} · For: {r['who_for']}  \n"
+                f"Source: {r['source']} · Last checked: {r['last_checked']}"
+            )
+
+
+tab_home, tab_match, tab_join, tab_listen, tab_wait, tab_cost, tab_about = st.tabs([
+    "🏠 Start here",
+    "🤝 Find support",
+    "👥 Join in",
+    "🎧 Listen and learn",
+    "⏳ Waiting times",
+    "📊 The cost",
     "ℹ️ About",
 ])
 
 # ─────────────────────────────────────────────────────────
+# START HERE
+# ─────────────────────────────────────────────────────────
+with tab_home:
+    st.subheader("Where are you right now?")
+    st.caption(
+        "You do not have to wait for one service to act. Here are several routes "
+        "you can use at the same time. This tool signposts; it does not give "
+        "medical advice or treatment."
+    )
+    h1, h2, h3 = st.columns(3)
+    with h1:
+        with st.container(border=True):
+            st.markdown("#### I need help now")
+            st.markdown(
+                "**Samaritans** 116 123  \n**Shout** text SHOUT to 85258  \n"
+                "**NHS 111**, option 2  \n**999** if in immediate danger"
+            )
+    with h2:
+        with st.container(border=True):
+            st.markdown("#### I am waiting for NHS support")
+            st.markdown(
+                "Open **Find support** and answer five questions. You get a "
+                "short waiting plan you can save. Then check **Waiting times** "
+                "for your rights while you wait."
+            )
+    with h3:
+        with st.container(border=True):
+            st.markdown("#### I want to feel better before things get worse")
+            st.markdown(
+                "Try **Join in** for peer support and local organisations, and "
+                "**Listen and learn** for free audio guides and self-help from "
+                "trusted sources."
+            )
+    st.info(
+        "Every listing shows who runs it, where the information came from and "
+        "when it was last checked. No accounts. No personal data is collected."
+    )
+
+# ─────────────────────────────────────────────────────────
+# JOIN IN
+# ─────────────────────────────────────────────────────────
+with tab_join:
+    st.subheader("You do not have to do this alone")
+    st.caption(
+        "Groups, peer support and local organisations run by established "
+        "charities. Each links to the organisation's own page."
+    )
+    show_resources("join")
+    st.warning(
+        "Early version: national organisations and directories only. Local "
+        "sessions and activities (councils, local Minds, community groups) will "
+        "be added area by area, and only after being checked against the "
+        "organisation's own page."
+    )
+
+# ─────────────────────────────────────────────────────────
+# LISTEN AND LEARN
+# ─────────────────────────────────────────────────────────
+with tab_listen:
+    st.subheader("Things you can do today, on your own")
+    st.caption(
+        "Free self-help from trusted sources. This is support while you wait, "
+        "not treatment. If things get worse, contact your GP or a crisis line."
+    )
+    show_resources("listen")
+    st.warning(
+        "Coming next: a curated selection of podcasts and short animated videos "
+        "from trusted organisations. This project links to them; it does not "
+        "make its own treatment content."
+    )
+
+# ─────────────────────────────────────────────────────────
 # TAB 1 — POSTCODE SEARCH / NAVIGATE
 # ─────────────────────────────────────────────────────────
-with tab1:
+with tab_wait:
     st.subheader("Find out how long the wait is near you")
     st.caption(
         "🔵 Physical health figures below are real, computed from the NHS England RTT "
@@ -162,7 +256,7 @@ with tab1:
             f"Same NHS. Different postcode."
         )
         st.markdown(
-            "⏳ **Facing a long wait?** Open the **Get support now** tab — "
+            "⏳ **Facing a long wait?** Open the **Find support** tab — "
             "answer five questions and we'll match you to support available today."
         )
 
@@ -183,7 +277,8 @@ with tab1:
 # ─────────────────────────────────────────────────────────
 # TAB 2 — INEQUALITY / TREND
 # ─────────────────────────────────────────────────────────
-with tab2:
+with tab_wait:
+    st.divider()
     st.subheader("Where you live decides how long you wait")
     st.caption("Median waits by trust — the postcode lottery in one chart.")
 
@@ -196,9 +291,11 @@ with tab2:
     st.plotly_chart(fig2, width="stretch")
 
     c1, c2, c3 = st.columns(3)
-    c1.metric("England median MH wait", "28 weeks", "+7 vs last year")
-    c2.metric("Longest wait shown", "52 weeks", "Leeds Community Healthcare")
-    c3.metric("Shortest wait shown", "9 weeks", "Berkshire Healthcare")
+    _s = DEMO_TRUSTS.sort_values("MH wait (weeks)")
+    c1.metric("England median MH wait (illustrative)", "28 weeks")
+    c2.metric("Longest wait shown (illustrative)", f"{_s.iloc[-1]['MH wait (weeks)']:.0f} weeks", _s.iloc[-1]["Trust"])
+    c3.metric("Shortest wait shown (illustrative)", f"{_s.iloc[0]['MH wait (weeks)']:.0f} weeks", _s.iloc[0]["Trust"])
+    st.caption("Mental health waits and the 12-month trend are illustrative placeholders. Physical health waits are real.")
 
     st.markdown("#### 12-month trend — the gap is widening")
     trend_long = DEMO_TREND.melt(id_vars="Month", var_name="Series", value_name="Weeks")
@@ -215,7 +312,7 @@ with tab2:
 # ─────────────────────────────────────────────────────────
 # TAB 3 — MATCHING ENGINE
 # ─────────────────────────────────────────────────────────
-with tab3:
+with tab_match:
     st.subheader("You don't have to wait in silence")
     st.caption(
         "Tell us a little about your situation and we'll show you the two or "
@@ -266,13 +363,37 @@ with tab3:
                 cost_label = "Free" if org["cost_category"] == "free" else f"Up to £{org['cost_max']}/session"
                 st.caption(
                     f"{cost_label} · {org['format_tags'].replace(',', ' · ')} · "
-                    f"Approach: {org['approach']}"
+                    f"Approach: {org['approach']}  \n"
+                    f"Last checked: {org['verified_date']}"
                 )
+
+        # ── My waiting plan ──
+        st.markdown("---")
+        st.subheader("My waiting plan")
+        first = matches.iloc[0] if not matches.empty else None
+        plan = ["MY WAITING PLAN", ""]
+        if first is not None:
+            plan.append(f"1. Contact: {first['name']} - {first['url']}")
+        plan += [
+            "2. Join in: find your local Mind - https://www.mind.org.uk/information-support/local-minds/",
+            "   or a Rethink support group - https://www.rethink.org/help-in-your-area/support-groups/",
+            "3. Listen: NHS mental wellbeing audio guides - https://www.nhs.uk/mental-health/self-help/guides-tools-and-activities/mental-wellbeing-audio-guides/",
+            "4. If things get worse: Samaritans 116 123, text SHOUT to 85258, NHS 111 option 2, 999 in an emergency.",
+            "",
+            "This plan signposts services. It is not medical advice.",
+        ]
+        plan_text = "\n".join(plan)
+        with st.container(border=True):
+            st.text(plan_text)
+        st.download_button(
+            "Save my plan (text file)", plan_text, file_name="my-waiting-plan.txt",
+            on_click="ignore",
+        )
 
 # ─────────────────────────────────────────────────────────
 # TAB 4 — ECONOMIC LAYER
 # ─────────────────────────────────────────────────────────
-with tab4:
+with tab_cost:
     st.subheader("What the waiting list costs the country")
 
     st.success(
@@ -325,12 +446,20 @@ with tab4:
 # ─────────────────────────────────────────────────────────
 # TAB 5 — ABOUT
 # ─────────────────────────────────────────────────────────
-with tab5:
+with tab_about:
     st.subheader("About this tool")
     st.markdown("""
-**Who built it** — Gokul, Data Analyst, Reading UK. MSc Financial Technology
-(Distinction, University of Kent). Built because NHS mental health waiting data
-is published every month — but invisible to the people it affects most.
+**What it is** — a free navigation layer for people waiting for NHS mental
+health support. It connects people to help that already exists and is easy to
+miss: NHS routes, charity support, peer groups and trusted self-help. It does
+not give medical advice or treatment.
+
+**Who built it** — Gokul Rajan, Reading UK. MSc Financial Technology
+(Distinction, University of Kent). Product design and data. Prototyped with AI
+coding tools. Not yet reviewed for clinical safety or accessibility.
+
+**Listings** — each shows its source and last-checked date. Support, groups and
+self-help entries link to the organisation's own page.
 
 **Data status, honestly:**
 - ✅ **Physical health waits** — real, computed from the NHS England RTT March
