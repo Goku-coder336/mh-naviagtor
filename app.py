@@ -176,11 +176,13 @@ with tab_join:
         "charities. Each links to the organisation's own page."
     )
     show_resources("join")
+    st.markdown("#### Local: Berkshire West (Reading, West Berkshire, Wokingham)")
+    st.caption("Pilot area. Each entry is taken from the organisation's or council's own page.")
+    show_resources("local")
     st.warning(
-        "Early version: national organisations and directories only. Local "
-        "sessions and activities (councils, local Minds, community groups) will "
-        "be added area by area, and only after being checked against the "
-        "organisation's own page."
+        "Early version. Local listings so far cover Berkshire West only, and "
+        "more local sessions and activities will be added area by area, only "
+        "after being checked against the organisation's own page."
     )
 
 # ─────────────────────────────────────────────────────────
