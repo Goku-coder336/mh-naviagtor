@@ -66,17 +66,42 @@ st.markdown("""
 html, body, [class*="css"], .stMarkdown, button, input { font-family: Arial, Helvetica, sans-serif !important; }
 .block-container { max-width: 1100px; padding-top: 1.5rem; }
 h1 { color: #FFFFFF !important; background: #005EB8; margin: 0 !important; padding: 28px 28px 8px 28px !important; border-radius: 8px 8px 0 0; font-weight: 700 !important; }
-h1 + div, [data-testid="stCaptionContainer"]:first-of-type { }
 .nhs-sub { background: #005EB8; color: #FFFFFF; padding: 0 28px 24px 28px; border-radius: 0 0 8px 8px; font-size: 1.1rem; line-height: 1.5; margin-bottom: 16px; }
-.stTabs [data-baseweb="tab-list"] { gap: 4px; border-bottom: 2px solid #D8DDE0; flex-wrap: wrap; }
-.stTabs [data-baseweb="tab"] { font-weight: 700; color: #005EB8; padding: 12px 16px; }
-.stTabs [aria-selected="true"] { color: #003087 !important; border-bottom: 4px solid #FFB81C; }
-[data-testid="stVerticalBlockBorderWrapper"] { border-left: 6px solid #005EB8 !important; border-radius: 4px; background: #FFFFFF; }
+
+/* Tabs. This Streamlit version renders role="tablist" and role="tab" (no data-baseweb
+   attributes), so the old .stTabs [data-baseweb] selectors matched nothing. Tabs wrap
+   onto extra rows instead of scrolling sideways, and Streamlit's own selection bar is
+   hidden (newer versions use .react-aria-SelectionIndicator, 1.50 uses data-baseweb
+   tab-highlight and tab-border) so the NHS yellow underline is the only indicator. */
+[role="tablist"] { flex-wrap: wrap !important; overflow: visible !important; height: auto !important; column-gap: 4px; border-bottom: 2px solid #D8DDE0; }
+[role="tablist"]::after, .react-aria-SelectionIndicator, [data-baseweb="tab-highlight"], [data-baseweb="tab-border"] { display: none !important; }
+[role="tab"] { padding: 8px 12px !important; min-height: 44px; border-bottom: 4px solid transparent; color: #005EB8 !important; font-size: 1rem !important; font-weight: 700; }
+[role="tab"][aria-selected="true"] { color: #003087 !important; border-bottom-color: #FFB81C !important; }
+
+/* Cards. st.container(border=True) now renders as stLayoutWrapper > stVerticalBlock;
+   the old stVerticalBlockBorderWrapper test id no longer exists. */
+[data-testid="stLayoutWrapper"] > [data-testid="stVerticalBlock"] { border-left: 6px solid #005EB8 !important; border-radius: 4px; background: #FFFFFF; }
+
 a { color: #005EB8; } a:hover { color: #7C2855; }
 .stButton > button, .stLinkButton > a { background: #007F3B; color: #FFFFFF; border: 0; border-radius: 4px; font-weight: 700; }
 .stButton > button:hover, .stLinkButton > a:hover { background: #00662F; color: #FFFFFF; }
-a:focus, button:focus, input:focus { outline: 3px solid #FFB81C !important; outline-offset: 0; }
-.tag { display: inline-block; background: #E8EDEE; color: #212B32; border-radius: 4px; padding: 2px 8px; font-size: 0.85rem; margin-right: 6px; }
+
+/* Keyboard focus (WCAG 2.4.7 and 1.4.11). A yellow ring inside a dark ring is visible
+   on both light and dark backgrounds; yellow alone is only 1.7:1 on white. */
+a:focus-visible, button:focus-visible, [role="tab"]:focus-visible, input:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid #FFB81C !important; outline-offset: 0 !important; box-shadow: 0 0 0 6px #212B32 !important;
+}
+
+/* Text: nothing below 16px, and captions at full opacity in an NHS secondary text colour (7.75:1 on white). */
+[data-testid="stCaptionContainer"] { opacity: 1 !important; color: #425563 !important; }
+[data-testid="stCaptionContainer"] *, [data-testid="stMarkdownContainer"] p, .tag { font-size: 1rem !important; }
+.tag { display: inline-block; background: #E8EDEE; color: #212B32; border-radius: 4px; padding: 2px 8px; margin-right: 6px; }
+
+/* Phones */
+@media (max-width: 640px) {
+  h1 { font-size: 2rem !important; padding: 20px 16px 8px 16px !important; }
+  .nhs-sub { padding: 0 16px 20px 16px; }
+}
 </style>
 """, unsafe_allow_html=True)
 st.title("Mental Health Navigator")
