@@ -42,37 +42,12 @@ st.set_page_config(
 # end of treatment) from the NHS Talking Therapies 2025-26 annual
 # report. Source: digital.nhs.uk.
 #
-# STILL DEMO: mental health wait (weeks) per ICB. The NHS Talking
-# Therapies MONTHLY waiting-time file (referral to first treatment)
-# has not yet been located/downloaded — the annual report only
-# covers treatment outcomes, not wait times. These figures are
-# illustrative and clearly marked as such throughout the app.
+# NOT YET CONNECTED: mental health waiting times by ICB. The app says
+# so and shows no estimate. Only real data is displayed anywhere.
 # ─────────────────────────────────────────────────────────
 _rtt_real = pd.read_csv(
     _find("rtt_by_icb_real.csv")
 )
-
-# Illustrative MH wait per ICB — same 8 ICBs as the real physical
-# health leaders, so the comparison chart is meaningful. Replace
-# this column the moment the real monthly IAPT file is found.
-_demo_mh_wait = {
-    "NHS GREATER MANCHESTER INTEGRATED CARE BOARD": 34,
-    "NHS NORTH EAST AND NORTH CUMBRIA INTEGRATED CARE BOARD": 29,
-    "NHS CHESHIRE AND MERSEYSIDE INTEGRATED CARE BOARD": 31,
-    "NHS NORTH WEST LONDON INTEGRATED CARE BOARD": 26,
-    "NHS NORTH EAST LONDON INTEGRATED CARE BOARD": 33,
-    "NHS SUSSEX INTEGRATED CARE BOARD": 22,
-    "NHS WEST YORKSHIRE INTEGRATED CARE BOARD": 52,
-    "NHS LANCASHIRE AND SOUTH CUMBRIA INTEGRATED CARE BOARD": 19,
-}
-
-DEMO_TRUSTS = _rtt_real.head(8).copy()
-DEMO_TRUSTS["Trust"] = DEMO_TRUSTS["icb_region"].str.title()
-DEMO_TRUSTS["ICB Region"] = DEMO_TRUSTS["icb_region"]
-DEMO_TRUSTS["Physical wait (weeks)"] = DEMO_TRUSTS["physical_health_wait_weeks"]
-DEMO_TRUSTS["MH wait (weeks)"] = DEMO_TRUSTS["icb_region"].map(_demo_mh_wait)
-DEMO_TRUSTS["6-week target met %"] = (100 - DEMO_TRUSTS["MH wait (weeks)"] * 1.4).clip(15, 85).round(0)
-DEMO_TRUSTS = DEMO_TRUSTS[["Trust", "ICB Region", "MH wait (weeks)", "Physical wait (weeks)", "6-week target met %"]]
 
 # Real national NHS Talking Therapies figures (2025-26 annual report)
 REAL_REFERRALS_RECEIVED = 1_813_303
@@ -82,20 +57,33 @@ REAL_LONG_TERM_SICK = 47_434
 REAL_EMPLOYED_END = 385_736
 REAL_NATIONAL_PHYSICAL_WAIT_WEEKS = 15.6  # from RTT, 7.05M patients, weighted average
 
-DEMO_TREND = pd.DataFrame({
-    "Month": pd.date_range("2025-07-01", periods=12, freq="MS"),
-    "England median MH wait (weeks)": [21, 22, 22, 23, 24, 24, 25, 26, 26, 27, 28, 28],
-    "England median physical wait (weeks)": [15, 15, 16, 16, 16, 15, 15, 16, 16, 16, 15, 15],
-})
-
 # ─────────────────────────────────────────────────────────
 # HEADER
 # ─────────────────────────────────────────────────────────
+
+st.markdown("""
+<style>
+html, body, [class*="css"], .stMarkdown, button, input { font-family: Arial, Helvetica, sans-serif !important; }
+.block-container { max-width: 1100px; padding-top: 1.5rem; }
+h1 { color: #FFFFFF !important; background: #005EB8; margin: 0 !important; padding: 28px 28px 8px 28px !important; border-radius: 8px 8px 0 0; font-weight: 700 !important; }
+h1 + div, [data-testid="stCaptionContainer"]:first-of-type { }
+.nhs-sub { background: #005EB8; color: #FFFFFF; padding: 0 28px 24px 28px; border-radius: 0 0 8px 8px; font-size: 1.1rem; line-height: 1.5; margin-bottom: 16px; }
+.stTabs [data-baseweb="tab-list"] { gap: 4px; border-bottom: 2px solid #D8DDE0; flex-wrap: wrap; }
+.stTabs [data-baseweb="tab"] { font-weight: 700; color: #005EB8; padding: 12px 16px; }
+.stTabs [aria-selected="true"] { color: #003087 !important; border-bottom: 4px solid #FFB81C; }
+[data-testid="stVerticalBlockBorderWrapper"] { border-left: 6px solid #005EB8 !important; border-radius: 4px; background: #FFFFFF; }
+a { color: #005EB8; } a:hover { color: #7C2855; }
+.stButton > button, .stLinkButton > a { background: #007F3B; color: #FFFFFF; border: 0; border-radius: 4px; font-weight: 700; }
+.stButton > button:hover, .stLinkButton > a:hover { background: #00662F; color: #FFFFFF; }
+a:focus, button:focus, input:focus { outline: 3px solid #FFB81C !important; outline-offset: 0; }
+.tag { display: inline-block; background: #E8EDEE; color: #212B32; border-radius: 4px; padding: 2px 8px; font-size: 0.85rem; margin-right: 6px; }
+</style>
+""", unsafe_allow_html=True)
 st.title("Mental Health Navigator")
-st.caption(
-    "A free, open-source navigation layer for people waiting for NHS mental health "
-    "support. Prevention is better than cure: find help, people and tools you can "
-    "use today."
+st.markdown(
+    '<div class="nhs-sub">A free, open-source plan for people waiting for NHS mental health support. '
+    'Find help, people and tools you can use today.</div>',
+    unsafe_allow_html=True,
 )
 st.error(
     "**In crisis right now?** Call **Samaritans 116 123** (free, 24/7) · "
@@ -117,11 +105,13 @@ def show_resources(section):
             )
 
 
-tab_home, tab_match, tab_join, tab_listen, tab_wait, tab_cost, tab_about = st.tabs([
+tab_home, tab_match, tab_join, tab_listen, tab_prog, tab_media, tab_wait, tab_cost, tab_about = st.tabs([
     "🏠 Start here",
     "🤝 Find support",
     "👥 Join in",
     "🎧 Listen and learn",
+    "📚 Programmes",
+    "🎙️ Podcasts and video",
     "⏳ Waiting times",
     "📊 The cost",
     "ℹ️ About",
@@ -195,11 +185,72 @@ with tab_listen:
         "not treatment. If things get worse, contact your GP or a crisis line."
     )
     show_resources("listen")
-    st.warning(
-        "Coming next: a curated selection of podcasts and short animated videos "
-        "from trusted organisations. This project links to them; it does not "
-        "make its own treatment content."
-    )
+    st.info("Looking for structured programmes, podcasts or video? See the **Programmes** and **Podcasts and video** tabs.")
+
+# ─────────────────────────────────────────────────────────
+# PROGRAMMES, PODCASTS AND VIDEO (every link is to the organisation's own page)
+# ─────────────────────────────────────────────────────────
+PROGRAMMES = [
+    ("NHS Talking Therapies", "https://www.nhs.uk/tests-and-treatments/talking-therapies/",
+     "Free, confidential talking treatments for anxiety and depression. You can refer yourself without seeing a GP.",
+     "NHS", "Treatment"),
+    ("Every Mind Matters", "https://www.nhs.uk/every-mind-matters/",
+     "Expert advice, practical tips and a personalised action plan for stress, anxiety, low mood and sleep.",
+     "NHS", "Self help plan"),
+    ("Mental wellbeing audio guides", "https://www.nhs.uk/mental-health/self-help/guides-tools-and-activities/mental-wellbeing-audio-guides/",
+     "Short audio guides on topics such as sleep problems and unhelpful thinking.",
+     "NHS", "Audio"),
+    ("Berkshire Talking Therapies", "https://www.berkshirehealthcare.nhs.uk/talking-therapies",
+     "The local NHS Talking Therapies service for Berkshire, run by Berkshire Healthcare NHS Foundation Trust.",
+     "Berkshire Healthcare", "Local"),
+]
+PODCASTS = [
+    ("Mind podcasts: your stories", "https://www.mind.org.uk/information-support/podcasts/",
+     "A series in which people talk about what it is like to live with mental health problems.", "Mind"),
+    ("The Rethink Mental Illness podcast", "https://www.rethink.org/news-and-stories/podcasts/",
+     "Conversations with people living with mental illness and people working in mental health.", "Rethink Mental Illness"),
+    ("Mental Health Foundation podcasts", "https://www.mentalhealth.org.uk/explore-mental-health/podcasts",
+     "Podcasts from the home of Mental Health Awareness Week.", "Mental Health Foundation"),
+]
+CHECKED = "6 Nov 2026"
+
+
+def link_card(name, url, desc, org, tag=None):
+    with st.container(border=True):
+        st.markdown(f"### [{name}]({url})")
+        st.markdown(desc)
+        chips = f'<span class="tag">{org}</span>' + (f'<span class="tag">{tag}</span>' if tag else "")
+        st.markdown(chips, unsafe_allow_html=True)
+        st.caption(f"Opens the organisation's own page · Last checked: {CHECKED}")
+
+
+with tab_prog:
+    st.subheader("Programmes you can start now")
+    st.caption("Run by the NHS. You can use these while you wait. They support you; they do not replace a clinician.")
+    c1, c2 = st.columns(2)
+    for k, (n, u, d, o, t) in enumerate(PROGRAMMES):
+        with (c1 if k % 2 == 0 else c2):
+            link_card(n, u, d, o, t)
+
+with tab_media:
+    st.subheader("Mental health awareness: watch and listen")
+    st.caption("Explainers and podcasts from trusted organisations. This project links to them and makes no treatment content of its own.")
+    st.markdown("#### Video: how NHS Talking Therapies work")
+    vcol, tcol = st.columns([3, 2])
+    with vcol:
+        st.video("https://www.youtube.com/watch?v=jLgv0E1k6hs")
+        st.caption("NHS, via YouTube. Treatment for depression and anxiety | NHS Talking Therapies.")
+    with tcol:
+        with st.container(border=True):
+            st.markdown("**More video**")
+            st.markdown("- [Every Mind Matters on YouTube](https://www.youtube.com/channel/UCNG4k3ZA2rjaupAeDBO-t1Q/videos)")
+            st.markdown("- [Mind, the mental health charity, on YouTube](https://www.youtube.com/channel/UCarWBJYMNqJxgn6n8_htCTQ)")
+        with st.container(border=True):
+            st.markdown("**Animated explainer for this project**")
+            st.caption("Not made yet. A short animated explainer about mental health awareness can be added here once it is made and reviewed.")
+    st.markdown("#### Podcasts")
+    for n, u, d, o in PODCASTS:
+        link_card(n, u, d, o, "Podcast")
 
 # ─────────────────────────────────────────────────────────
 # TAB 1 — POSTCODE SEARCH / NAVIGATE
@@ -293,20 +344,6 @@ with tab_wait:
             width="stretch", hide_index=True,
         )
 
-    with st.expander("Illustrative comparison: mental vs physical health waits (placeholder data)"):
-        shown = DEMO_TRUSTS.sort_values("MH wait (weeks)")
-        st.caption("Mental health figures here are illustrative placeholders, not real data.")
-        chart_df = shown.melt(
-            id_vars="Trust", value_vars=["MH wait (weeks)", "Physical wait (weeks)"],
-            var_name="Type", value_name="Weeks",
-        )
-        fig = px.bar(
-            chart_df, x="Trust", y="Weeks", color="Type", barmode="group",
-            color_discrete_map={"MH wait (weeks)": "#e74c3c", "Physical wait (weeks)": "#2ecc71"},
-        )
-        fig.update_layout(xaxis_tickangle=-35, height=420, legend_title="")
-        st.plotly_chart(fig, width="stretch")
-
     with st.expander("📋 Your rights while you wait — plain English"):
         st.markdown("""
 - **Self-refer to NHS Talking Therapies** — you do not need a GP referral for
@@ -326,35 +363,33 @@ with tab_wait:
 # ─────────────────────────────────────────────────────────
 with tab_wait:
     st.divider()
-    st.subheader("Where you live decides how long you wait")
-    st.caption("Median waits by trust — the postcode lottery in one chart.")
-
-    fig2 = px.bar(
-        DEMO_TRUSTS.sort_values("MH wait (weeks)", ascending=True),
-        x="MH wait (weeks)", y="Trust", orientation="h",
-        color="MH wait (weeks)", color_continuous_scale=["#2ecc71", "#f5a623", "#e74c3c"],
+    st.subheader("Where you live affects how long you wait")
+    st.caption(
+        "Real physical health waits by NHS area (NHS England RTT, March 2026). "
+        "Mental health waits by area are not connected yet."
     )
-    fig2.update_layout(height=420, coloraxis_showscale=False)
+    _w = _icbs.sort_values("physical_health_wait_weeks", ascending=False)
+    _top = pd.concat([_w.head(8), _w.tail(8)])
+    fig2 = px.bar(
+        _top.sort_values("physical_health_wait_weeks"),
+        x="physical_health_wait_weeks", y="Area", orientation="h",
+        color="physical_health_wait_weeks",
+        color_continuous_scale=["#2ecc71", "#f5a623", "#e74c3c"],
+        labels={"physical_health_wait_weeks": "Weeks (patient-weighted average)"},
+    )
+    fig2.update_layout(height=520, coloraxis_showscale=False)
     st.plotly_chart(fig2, width="stretch")
 
     c1, c2, c3 = st.columns(3)
-    _s = DEMO_TRUSTS.sort_values("MH wait (weeks)")
-    c1.metric("England median MH wait (illustrative)", "28 weeks")
-    c2.metric("Longest wait shown (illustrative)", f"{_s.iloc[-1]['MH wait (weeks)']:.0f} weeks", _s.iloc[-1]["Trust"])
-    c3.metric("Shortest wait shown (illustrative)", f"{_s.iloc[0]['MH wait (weeks)']:.0f} weeks", _s.iloc[0]["Trust"])
-    st.caption("Mental health waits and the 12-month trend are illustrative placeholders. Physical health waits are real.")
-
-    st.markdown("#### 12-month trend — the gap is widening")
-    trend_long = DEMO_TREND.melt(id_vars="Month", var_name="Series", value_name="Weeks")
-    fig3 = px.line(
-        trend_long, x="Month", y="Weeks", color="Series",
-        color_discrete_map={
-            "England median MH wait (weeks)": "#e74c3c",
-            "England median physical wait (weeks)": "#2ecc71",
-        },
+    c1.metric("England average", f"{REAL_NATIONAL_PHYSICAL_WAIT_WEEKS} weeks")
+    c2.metric("Longest area", f"{_w.iloc[0]['physical_health_wait_weeks']:.1f} weeks", _w.iloc[0]["Area"])
+    c3.metric("Shortest area", f"{_w.iloc[-1]['physical_health_wait_weeks']:.1f} weeks", _w.iloc[-1]["Area"])
+    st.caption(
+        "Shown: the 8 longest and 8 shortest of 42 areas. The full list is above. "
+        "These are physical health waits, used to show how much waits vary by area. "
+        "Mental health waits by area will be added when the monthly NHS Talking "
+        "Therapies data is connected."
     )
-    fig3.update_layout(height=380, legend_title="")
-    st.plotly_chart(fig3, width="stretch")
 
 # ─────────────────────────────────────────────────────────
 # TAB 3 — MATCHING ENGINE
@@ -462,32 +497,12 @@ with tab_cost:
     )
 
     st.markdown("#### National context")
-    c4, c5, c6 = st.columns(3)
-    c4.metric("Out of work due to mental health (UK-wide estimate)", "2.8M people")
-    c5.metric("Annual economic cost (UK-wide estimate)", "£28bn")
-    c6.metric("Real national physical health wait (RTT, weighted average)", f"{REAL_NATIONAL_PHYSICAL_WAIT_WEEKS} weeks")
+    st.metric("Physical health wait, England (RTT, weighted average)", f"{REAL_NATIONAL_PHYSICAL_WAIT_WEEKS} weeks")
     st.caption(
-        "The 2.8M / £28bn figures are UK-wide estimates from published mental health "
-        "economic research, not computed from the two files above. The physical health "
-        "wait figure is real, computed from 7.05 million patients on incomplete RTT "
-        "pathways nationally as of March 2026."
-    )
-
-    st.markdown("#### Longer waits, more people out of work — the correlation")
-    econ = DEMO_TRUSTS.copy()
-    econ["Economic inactivity due to MH (%)"] = [3.1, 3.4, 3.9, 4.4, 7.8, 7.2, 6.1, 5.3]
-    fig4 = px.scatter(
-        econ, x="MH wait (weeks)", y="Economic inactivity due to MH (%)",
-        text="ICB Region", size="MH wait (weeks)", color="MH wait (weeks)",
-        color_continuous_scale=["#2ecc71", "#e74c3c"],
-    )
-    fig4.update_traces(textposition="top center")
-    fig4.update_layout(height=460, coloraxis_showscale=False)
-    st.plotly_chart(fig4, width="stretch")
-    st.caption(
-        "Each point is a region. Areas with longer mental health waits show "
-        "higher rates of people out of work due to mental health conditions. "
-        "Data: NHS IAPT monthly statistics + ONS Labour Force Survey."
+        "Computed from 7.05 million patients on incomplete RTT pathways nationally "
+        "as of March 2026. Links between waits and economic inactivity by area are "
+        "not shown, because that analysis needs mental health wait data by area and "
+        "ONS economic inactivity data, neither of which is connected yet."
     )
 
 # ─────────────────────────────────────────────────────────
@@ -505,6 +520,14 @@ not give medical advice or treatment.
 (Distinction, University of Kent). Product design and data. Prototyped with AI
 coding tools. Not yet reviewed for clinical safety or accessibility.
 
+**How this fits alongside the NHS App** — the NHS App is the national route
+into NHS services, and government plans say it could offer self-referral to
+talking therapies and mental health advice. This tool does not replace any of
+that. It is for the time between asking for help and getting it: a short plan
+that puts crisis help first, then the NHS route, then trusted charity, peer and
+self-help options near you. Where the NHS App offers something, this tool
+points to it. It does not copy or compete with it.
+
 **Coverage** — waiting-time data covers NHS England (all 42 integrated care boards). Scotland, Wales and Northern Ireland have separate health services and are planned for later. Crisis lines and national charities listed work UK-wide.
 
 **Listings** — each shows its source and last-checked date. Support, groups and
@@ -517,10 +540,10 @@ self-help entries link to the organisation's own page.
 - ✅ **National referral and employment figures** — real, from the NHS
   Talking Therapies 2025-26 annual report (1.81 million referrals received,
   employment status at end of treatment).
-- 🟡 **Mental health wait times by ICB** — still illustrative placeholders.
-  The NHS Talking Therapies annual report covers treatment outcomes, not
-  waiting times; the monthly waiting-time publication has not yet been
-  located and downloaded. This is the next data source to connect.
+- 🟡 **Mental health wait times by ICB** — not yet connected, so the app
+  shows "Not yet available" and no estimates. The NHS Talking Therapies
+  annual report covers treatment outcomes, not waiting times. The monthly
+  waiting-time publication is the next data source to connect.
 
 **Data sources** — NHS Talking Therapies (digital.nhs.uk) · NHS RTT waiting
 times (england.nhs.uk) · ONS economic inactivity by local authority
