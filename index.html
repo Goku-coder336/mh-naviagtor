@@ -722,8 +722,28 @@
   var root = document.documentElement;
   var routes = ['home', 'plan', 'support', 'waiting-times', 'the-cost', 'about'];
   var titles = { home: 'Mental Health Navigator', plan: 'Your waiting plan', support: 'Support', 'waiting-times': 'Waiting times', 'the-cost': 'The cost', about: 'About', 'not-found': 'Page not found' };
+  // Inside Streamlit the site runs in an about:srcdoc frame, where "#page" links
+  // would reload the Streamlit app. There, pages switch in memory instead.
+  var srcdoc = !/^https?:$/.test(location.protocol);
+  var memRoute = 'home';
+  function currentRoute() { return srcdoc ? memRoute : (location.hash || '#home').slice(1); }
+  function go(r) {
+    if (srcdoc) { memRoute = r; show(); }
+    else if (location.hash === '#' + r) show();
+    else location.hash = r;
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a) return;
+    e.preventDefault();
+    var h = a.getAttribute('href').slice(1);
+    if (h === 'main') { var m = document.getElementById('main'); m.setAttribute('tabindex', '-1'); m.focus(); return; }
+    go(h || 'home');
+    var jump = a.getAttribute('data-jump');
+    if (jump) setTimeout(function () { var el = document.getElementById(jump); if (el) el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); }, 60);
+  });
   function show() {
-    var r = (location.hash || '#home').slice(1);
+    var r = currentRoute();
     if (r === 'main') return;
     if (routes.indexOf(r) === -1) r = 'not-found';
     pages.forEach(function (p) { p.hidden = p.getAttribute('data-page') !== r; });
@@ -736,12 +756,6 @@
     if (r === 'home') armHome();
   }
   window.addEventListener('hashchange', show);
-  document.querySelectorAll('[data-jump]').forEach(function (a) {
-    a.addEventListener('click', function () {
-      var id = a.getAttribute('data-jump');
-      setTimeout(function () { var el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); }, 60);
-    });
-  });
 
   /* ---------- Menu ---------- */
   var toggle = document.querySelector('.menu-toggle'), sheet = document.getElementById('sheet');
