@@ -22,7 +22,9 @@ st.set_page_config(
 )
 
 # Hide Streamlit's own header, menu and padding so only the website shows,
-# and let the website fill the whole browser window.
+# and let the website fill the visible part of the browser window.
+# 100dvh is the visible height on phones (100vh includes the area behind the
+# browser's bottom bar, which hid the Next and Help buttons).
 st.markdown(
     """
     <style>
@@ -34,7 +36,11 @@ st.markdown(
       }
       [data-testid="stAppViewContainer"], .main, section.main { padding: 0 !important; }
       [data-testid="stVerticalBlock"] { gap: 0 !important; }
-      iframe { display: block; width: 100% !important; height: 100vh !important; border: 0; }
+      iframe {
+        display: block; width: 100% !important; border: 0;
+        height: 100vh !important;
+        height: 100dvh !important;
+      }
     </style>
     """,
     unsafe_allow_html=True,

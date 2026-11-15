@@ -25,7 +25,7 @@
     --crisis: #B23A26; --crisis-tint: #F8E7E2;
     --planned: #8A5A12; --planned-tint: #F5EAD6;
     --bar: #8DB9A0; --bar-hi: #C9784F;
-    --nav: rgba(255, 255, 255, 0.76); --sheet: rgba(246, 244, 238, 0.95);
+    --nav: rgba(255, 255, 255, 0.96); --sheet: rgba(246, 244, 238, 0.95);
     --h-from: #000000; --h-to: #666666;
     --font: 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
     --curve: cubic-bezier(0.22, 1, 0.36, 1);
@@ -38,7 +38,7 @@
       --crisis: #F0846F; --crisis-tint: #2E1D18;
       --planned: #E6BC6A; --planned-tint: #2C2414;
       --bar: #4E7F63; --bar-hi: #D98A63;
-      --nav: rgba(31, 31, 31, 0.76); --sheet: rgba(19, 18, 9, 0.95);
+      --nav: rgba(31, 31, 31, 0.96); --sheet: rgba(19, 18, 9, 0.95);
       --h-from: #FFFFFF; --h-to: #9B9B9B;
       color-scheme: dark;
     }
@@ -50,7 +50,7 @@
     --crisis: #F0846F; --crisis-tint: #2E1D18;
     --planned: #E6BC6A; --planned-tint: #2C2414;
     --bar: #4E7F63; --bar-hi: #D98A63;
-    --nav: rgba(31, 31, 31, 0.76); --sheet: rgba(19, 18, 9, 0.95);
+    --nav: rgba(31, 31, 31, 0.96); --sheet: rgba(19, 18, 9, 0.95);
     --h-from: #FFFFFF; --h-to: #9B9B9B;
     color-scheme: dark;
   }
@@ -341,7 +341,7 @@
   .sos-btn { position: relative; }
   .sos.nudge .sos-btn .ring { animation: ring 1600ms var(--curve) 2; }
   @keyframes ring { 0% { box-shadow: 0 0 0 0 var(--crisis); opacity: 0.6; } 100% { box-shadow: 0 0 0 16px var(--crisis); opacity: 0; } }
-  .sos-panel { width: min(380px, calc(100vw - 32px)); max-height: min(560px, calc(100vh - 120px)); overflow: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 24px 64px -24px rgba(29, 33, 30, 0.5); transform-origin: bottom right; opacity: 0; transform: translateY(24px) scale(0.96); visibility: hidden; transition: opacity 500ms var(--curve), transform 500ms var(--curve), visibility 0s linear 500ms; }
+  .sos-panel { width: min(380px, calc(100vw - 32px)); max-height: min(560px, calc(100vh - 120px)); max-height: min(560px, calc(100dvh - 120px)); overflow: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 24px 64px -24px rgba(29, 33, 30, 0.5); transform-origin: bottom right; opacity: 0; transform: translateY(24px) scale(0.96); visibility: hidden; transition: opacity 500ms var(--curve), transform 500ms var(--curve), visibility 0s linear 500ms; }
   .sos.open .sos-panel { opacity: 1; transform: none; visibility: visible; transition: opacity 500ms var(--curve), transform 500ms var(--curve), visibility 0s; }
   .sos-head { position: sticky; top: 0; display: flex; align-items: center; gap: 12px; padding: 16px; background: var(--crisis-tint); border-bottom: 1px solid var(--line); }
   .sos-head h2 { flex: 1; min-width: 0; }
@@ -360,6 +360,10 @@
   .btn.danger:hover { opacity: 0.9; }
   .young { margin-top: 8px; }
   footer { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important; }
+  /* Keep content, Back and Next clear of the floating Help button */
+  .page { padding-bottom: calc(112px + env(safe-area-inset-bottom, 0px)); }
+  [id] { scroll-margin-top: 88px; }
+  @media (max-width: 560px) { .sos-btn { padding: 10px 14px; } .page { padding-bottom: calc(128px + env(safe-area-inset-bottom, 0px)); } }
   .sos-btn .short { display: none; }
   @media (max-width: 720px) { .sos-btn .long { display: none; } .sos-btn .short { display: inline; } .sos-btn { padding: 8px 12px; } }
 
@@ -589,7 +593,7 @@
     <header class="page-head">
       <p class="eyebrow caption-3">WAITING TIMES</p>
       <h1 class="heading-2 grad">How long is the wait in your area?</h1>
-      <p class="soft body-3">Physical health waits are real, from the NHS England RTT March 2026 extract for all 42 NHS areas. Mental health waits by area are not connected yet, so none are shown.</p>
+      <p class="body-3">Mental health waits by area are not published like this yet. Below is the physical health wait in your area, to show how much waits vary by postcode.</p><p class="soft body-6">The physical health figures are real, from the NHS England RTT March 2026 extract for all 42 NHS areas. No mental health wait is shown, because none is connected yet.</p>
     </header>
 
     <div class="card">
@@ -655,7 +659,7 @@
     </div>
 
     <section class="block">
-      <div class="sec-head"><h2 class="heading-4">From referral to work</h2><p class="soft body-6">Of 1,813,303 people referred, 674,683 finished a course of treatment. Of those, 385,736 were employed at the end, 73,299 were still unemployed and seeking work, and 47,434 were recorded as long term sick.</p></div>
+      <div class="sec-head"><h2 class="heading-4">From referral to work</h2><p class="soft body-6">In 2025 to 26, 674,683 of 1,813,303 referrals had finished a course of treatment. Some people are still waiting or in treatment, so this is not a drop out rate. Of those who finished, 385,736 were employed at the end, 73,299 were still unemployed and seeking work, and 47,434 were recorded as long term sick.</p></div>
       <div class="flow body-6" id="flow"></div>
       <p class="caption-5 muted" style="margin-top:16px">Bars share one scale, from zero to the number of referrals. Source: NHS Talking Therapies 2025 to 26 annual report, employment status at end of treatment.</p>
     </section>
@@ -792,7 +796,7 @@
   function arrivalCheck() {
     var seen = false;
     try { seen = sessionStorage.getItem('mhn-sos') === '1'; sessionStorage.setItem('mhn-sos', '1'); } catch (e) {}
-    if (!seen) setTimeout(function () { openSos('', false); }, 900);
+    if (!seen) setTimeout(function () { if (window.innerWidth > 720) openSos('', false); else { sos.classList.remove('nudge'); void sos.offsetWidth; sos.classList.add('nudge'); } }, 900);
   }
   var YOUNG = '<div class="notice warn young body-6">' + '<svg class="i" viewBox="0 0 256 256" aria-hidden="true"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"/></svg>' + '<span><b class="body-4">Under 19?</b> Childline is free on 0800 1111 and the number does not show on your phone bill. Papyrus HOPELINE247 supports young people on 0800 068 4141, or text HOPE to 88247.</span></div>';
 
@@ -959,6 +963,7 @@
       '<h1 class="heading-3">' + (urgent ? 'Support that answers now' : 'Your matches') + '</h1>' +
       '<div class="answers caption-5">' + QUESTIONS.map(function (Q) { return '<span>' + esc(A[Q.key]) + '</span>'; }).join('') + '</div>';
     if (urgent) html += '<div class="notice alert body-5">' + icon('lifebuoy') + '<span>You said you need support now. These services answer straight away, day or night. If someone\'s life is at risk, or you cannot keep yourself safe, call 999 or go to A&amp;E.</span></div>';
+    html += '<p class="caption-5 muted">These are national options. Local listings cover Berkshire West only, as a Reading pilot, and are on the Support page.</p>';
     if (A.age === 'Under 18') html += YOUNG;
     if (!m.length) {
       html += '<div class="card"><span class="ic planned">' + icon('magnifying-glass') + '</span><h2 class="title-2">No exact match for those answers</h2><p class="body-6 soft">Try widening cost or format. Hub of Hope lists local services by postcode across the UK.</p><div class="row"><button class="btn primary button-sm" type="button" data-act="edit">Change answers</button><a class="btn button-sm" href="https://hubofhope.co.uk" target="_blank" rel="noopener">Open Hub of Hope ' + icon('arrow-up-right', true) + '</a></div></div>';
