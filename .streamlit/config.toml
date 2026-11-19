@@ -1,0 +1,7 @@
+[theme]
+# Fixed light theme so the NHS palette does not flip to dark mode with the visitor's system setting.
+base = "light"
+primaryColor = "#005EB8"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F0F4F5"
+textColor = "#212B32"
