@@ -25,7 +25,7 @@
     --crisis: #B23A26; --crisis-tint: #F8E7E2;
     --planned: #8A5A12; --planned-tint: #F5EAD6;
     --bar: #8DB9A0; --bar-hi: #C9784F;
-    --nav: rgba(255, 255, 255, 0.96); --sheet: rgba(246, 244, 238, 0.95);
+    --nav: rgba(255, 255, 255, 0.76); --sheet: rgba(246, 244, 238, 0.95);
     --h-from: #000000; --h-to: #666666;
     --font: 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
     --curve: cubic-bezier(0.22, 1, 0.36, 1);
@@ -38,7 +38,7 @@
       --crisis: #F0846F; --crisis-tint: #2E1D18;
       --planned: #E6BC6A; --planned-tint: #2C2414;
       --bar: #4E7F63; --bar-hi: #D98A63;
-      --nav: rgba(31, 31, 31, 0.96); --sheet: rgba(19, 18, 9, 0.95);
+      --nav: rgba(31, 31, 31, 0.76); --sheet: rgba(19, 18, 9, 0.95);
       --h-from: #FFFFFF; --h-to: #9B9B9B;
       color-scheme: dark;
     }
@@ -50,7 +50,7 @@
     --crisis: #F0846F; --crisis-tint: #2E1D18;
     --planned: #E6BC6A; --planned-tint: #2C2414;
     --bar: #4E7F63; --bar-hi: #D98A63;
-    --nav: rgba(31, 31, 31, 0.96); --sheet: rgba(19, 18, 9, 0.95);
+    --nav: rgba(31, 31, 31, 0.76); --sheet: rgba(19, 18, 9, 0.95);
     --h-from: #FFFFFF; --h-to: #9B9B9B;
     color-scheme: dark;
   }
@@ -341,7 +341,7 @@
   .sos-btn { position: relative; }
   .sos.nudge .sos-btn .ring { animation: ring 1600ms var(--curve) 2; }
   @keyframes ring { 0% { box-shadow: 0 0 0 0 var(--crisis); opacity: 0.6; } 100% { box-shadow: 0 0 0 16px var(--crisis); opacity: 0; } }
-  .sos-panel { width: min(380px, calc(100vw - 32px)); max-height: min(560px, calc(100vh - 120px)); max-height: min(560px, calc(100dvh - 120px)); overflow: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 24px 64px -24px rgba(29, 33, 30, 0.5); transform-origin: bottom right; opacity: 0; transform: translateY(24px) scale(0.96); visibility: hidden; transition: opacity 500ms var(--curve), transform 500ms var(--curve), visibility 0s linear 500ms; }
+  .sos-panel { width: min(380px, calc(100vw - 32px)); max-height: min(560px, calc(100vh - 120px)); overflow: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 24px 64px -24px rgba(29, 33, 30, 0.5); transform-origin: bottom right; opacity: 0; transform: translateY(24px) scale(0.96); visibility: hidden; transition: opacity 500ms var(--curve), transform 500ms var(--curve), visibility 0s linear 500ms; }
   .sos.open .sos-panel { opacity: 1; transform: none; visibility: visible; transition: opacity 500ms var(--curve), transform 500ms var(--curve), visibility 0s; }
   .sos-head { position: sticky; top: 0; display: flex; align-items: center; gap: 12px; padding: 16px; background: var(--crisis-tint); border-bottom: 1px solid var(--line); }
   .sos-head h2 { flex: 1; min-width: 0; }
@@ -360,10 +360,6 @@
   .btn.danger:hover { opacity: 0.9; }
   .young { margin-top: 8px; }
   footer { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important; }
-  /* Keep content, Back and Next clear of the floating Help button */
-  .page { padding-bottom: calc(112px + env(safe-area-inset-bottom, 0px)); }
-  [id] { scroll-margin-top: 88px; }
-  @media (max-width: 560px) { .sos-btn { padding: 10px 14px; } .page { padding-bottom: calc(128px + env(safe-area-inset-bottom, 0px)); } }
   .sos-btn .short { display: none; }
   @media (max-width: 720px) { .sos-btn .long { display: none; } .sos-btn .short { display: inline; } .sos-btn { padding: 8px 12px; } }
 
@@ -403,6 +399,25 @@
     .bar i { transition: none; }
     .tagline .w { color: var(--ink); transition: none; }
   }
+
+  /* Jarvis page */
+  textarea, input[type="number"] { width: 100%; min-width: 0; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 24px; transition: border-color 300ms var(--curve); }
+  textarea { display: block; resize: vertical; min-height: 120px; }
+  textarea.letter { min-height: 360px; }
+  textarea:hover, input[type="number"]:hover { border-color: var(--muted); }
+  textarea:focus, input[type="number"]:focus { outline: 2px solid var(--calm); outline-offset: 0; border-color: var(--calm); }
+  .jv-form { display: grid; gap: 16px; }
+  .row2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+  fieldset.qi { margin: 0; padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); min-width: 0; display: grid; gap: 12px; }
+  fieldset.qi legend { padding: 0; margin-bottom: 4px; }
+  fieldset.qi.missing { border-color: var(--crisis); }
+  .opts.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .opt.compact { padding: 12px; }
+  .opt.pill { padding: 8px 12px; border-radius: 9999px; }
+  .checks { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tab[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+  .jv-form .caption-2, .field .caption-2 { overflow-wrap: anywhere; }
+  @media (max-width: 720px) { .opts.four, .row2 { grid-template-columns: minmax(0, 1fr); } }
 </style>
 
 </head>
@@ -424,6 +439,7 @@
   <div class="links title-4">
     <a href="#home" data-route="home">Home</a>
     <a href="#support" data-route="support">Support</a>
+    <a href="#jarvis" data-route="jarvis">Jarvis</a>
     <a href="#waiting-times" data-route="waiting-times">Waiting times</a>
     <a href="#the-cost" data-route="the-cost">The cost</a>
     <a href="#about" data-route="about">About</a>
@@ -434,6 +450,7 @@
 <div class="sheet heading-5" id="sheet" aria-label="Menu">
   <a href="#home" data-route="home">Home</a>
   <a href="#support" data-route="support">Support</a>
+  <a href="#jarvis" data-route="jarvis">Jarvis</a>
   <a href="#waiting-times" data-route="waiting-times">Waiting times</a>
   <a href="#the-cost" data-route="the-cost">The cost</a>
   <a href="#about" data-route="about">About</a>
@@ -496,6 +513,12 @@
           <span class="go button-sm">Browse support <svg class="i sm" viewBox="0 0 256 256" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
         </a>
       </div>
+      <a class="card route-card" href="#jarvis" style="margin-top:16px">
+        <span class="ic"><svg class="i" viewBox="0 0 256 256" aria-hidden="true"><path d="M208,40H48A16,16,0,0,0,32,56v56c0,52.72,25.52,84.67,46.93,102.19,23.06,18.86,46,25.26,47,25.53a8,8,0,0,0,4.2,0c1-.27,23.91-6.67,47-25.53C198.48,196.67,224,164.72,224,112V56A16,16,0,0,0,208,40Zm0,72c0,37.07-13.66,67.16-40.6,89.42A129.3,129.3,0,0,1,128,223.62a128.25,128.25,0,0,1-38.92-21.81C61.82,179.51,48,149.3,48,112l0-56,160,0ZM82.34,141.66a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32l-56,56a8,8,0,0,1-11.32,0Z"/></svg></span>
+        <h3 class="title-2">Jarvis: your guide while you wait</h3>
+        <p class="body-6 soft">Describe how you feel and get suggested services. Take the PHQ-9 and GAD-7 questionnaires. Write a letter to your GP or MP, and see what time off work could cost you.</p>
+        <span class="go button-sm">Open Jarvis <svg class="i sm" viewBox="0 0 256 256" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+      </a>
     </div>
   </section>
 
@@ -544,8 +567,9 @@
         <details><summary class="title-3">Is this medical advice?<svg class="i" viewBox="0 0 256 256" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg></summary><p class="ans body-6">No. It points you to services and gives no diagnosis or treatment. If you are in crisis, call Samaritans on 116 123, text SHOUT to 85258, call 111 and choose the mental health option, or call 999 in an emergency.</p></details>
         <details><summary class="title-3">Does it replace the NHS?<svg class="i" viewBox="0 0 256 256" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg></summary><p class="ans body-6">No. Your NHS referral stays the main route to treatment. This is for the weeks in between, and it puts the NHS option in your plan alongside other trusted help.</p></details>
         <details><summary class="title-3">How is it different from the NHS App?<svg class="i" viewBox="0 0 256 256" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg></summary><p class="ans body-6">The NHS App is the national route into NHS services. This tool is for the time between asking for help and getting it. Where the NHS App offers something, the Navigator points to it.</p></details>
-        <details><summary class="title-3">What happens to my answers?<svg class="i" viewBox="0 0 256 256" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg></summary><p class="ans body-6">Your answers stay in your browser and are not stored or sent anywhere. There are no accounts. If you enter a postcode on the waiting times page, it is sent to the public postcodes.io service to find your area.</p></details>
+        <details><summary class="title-3">What happens to my answers?<svg class="i" viewBox="0 0 256 256" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg></summary><p class="ans body-6">Your answers stay in your browser and are not stored or sent anywhere. There are no accounts. If you enter a postcode on the waiting times page, or tick the box to name your NHS area in a Jarvis MP letter, the postcode is sent to the public postcodes.io service to find your area.</p></details>
         <details><summary class="title-3">Where does the data come from?<svg class="i" viewBox="0 0 256 256" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg></summary><p class="ans body-6">Physical health waits come from NHS England referral to treatment data for March 2026. National referral and employment figures come from the NHS Talking Therapies 2025 to 26 annual report. Services come from each organisation's own page. Mental health waits by area are not connected yet.</p></details>
+        <details><summary class="title-3">What is Jarvis?<svg class="i" viewBox="0 0 256 256" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg></summary><p class="ans body-6">A rule based guide, not an AI chatbot and not a clinician. It reads your words for common topics and suggests services, scores two NHS questionnaires, and writes letters from your own answers. It can get things wrong, so please check what it tells you. <a href="#jarvis">Open Jarvis</a>.</p></details>
         <details><summary class="title-3">What does it cost?<svg class="i" viewBox="0 0 256 256" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg></summary><p class="ans body-6">Nothing. Some listed services may charge, and each listing shows its cost.</p></details>
       </div>
     </div>
@@ -593,7 +617,7 @@
     <header class="page-head">
       <p class="eyebrow caption-3">WAITING TIMES</p>
       <h1 class="heading-2 grad">How long is the wait in your area?</h1>
-      <p class="body-3">Mental health waits by area are not published like this yet. Below is the physical health wait in your area, to show how much waits vary by postcode.</p><p class="soft body-6">The physical health figures are real, from the NHS England RTT March 2026 extract for all 42 NHS areas. No mental health wait is shown, because none is connected yet.</p>
+      <p class="soft body-3">Physical health waits are real, from the NHS England RTT March 2026 extract for all 42 NHS areas. Mental health waits by area are not connected yet, so none are shown.</p>
     </header>
 
     <div class="card">
@@ -659,7 +683,7 @@
     </div>
 
     <section class="block">
-      <div class="sec-head"><h2 class="heading-4">From referral to work</h2><p class="soft body-6">In 2025 to 26, 674,683 of 1,813,303 referrals had finished a course of treatment. Some people are still waiting or in treatment, so this is not a drop out rate. Of those who finished, 385,736 were employed at the end, 73,299 were still unemployed and seeking work, and 47,434 were recorded as long term sick.</p></div>
+      <div class="sec-head"><h2 class="heading-4">From referral to work</h2><p class="soft body-6">Of 1,813,303 people referred, 674,683 finished a course of treatment. Of those, 385,736 were employed at the end, 73,299 were still unemployed and seeking work, and 47,434 were recorded as long term sick.</p></div>
       <div class="flow body-6" id="flow"></div>
       <p class="caption-5 muted" style="margin-top:16px">Bars share one scale, from zero to the number of referrals. Source: NHS Talking Therapies 2025 to 26 annual report, employment status at end of treatment.</p>
     </section>
@@ -694,6 +718,7 @@
     <div style="display:grid;gap:16px">
       <div class="card"><h2 class="title-1">Who built it</h2><p class="body-6 soft">Gokul Rajan, Reading. MSc Financial Technology, University of Kent. Product design and data, prototyped with AI coding tools. Not yet reviewed for clinical safety or accessibility, and not an NHS service.</p></div>
       <div class="card"><h2 class="title-1">How it fits beside the NHS App</h2><p class="body-6 soft">The NHS App is the national route into NHS services. This tool is for the time between asking for help and getting it: a short plan that puts crisis help first, then the NHS route, then trusted charity, peer and self help options. Where the NHS App offers something, the Navigator points to it.</p></div>
+      <div class="card"><h2 class="title-1">About Jarvis</h2><p class="body-6 soft">Jarvis is a rule based guide, not an AI chatbot and not a clinician. It matches words and follows fixed rules, so it can get things wrong. It gives information, not medical advice, and it cannot diagnose anything. Letters are written only from what you tell it, with no statistics added. The sick pay figures come from GOV.UK and carry the date they were checked.</p></div>
       <div class="card"><h2 class="title-1">Coverage</h2><p class="body-6 soft">Waiting time data covers NHS England, all 42 areas. Scotland, Wales and Northern Ireland run their own health services and are planned for later. Crisis lines and national charities work across the UK. Local listings cover Berkshire West so far.</p></div>
       <div class="card">
         <h2 class="title-1">Data status</h2>
@@ -714,9 +739,24 @@
           <span class="copied caption-1" aria-live="polite"></span>
         </div>
       </div>
-      <div class="card" id="privacy"><h2 class="title-1">Privacy</h2><p class="body-6 soft">This site sets no cookies and has no accounts. Your answers to the five questions stay in your browser and are not stored or sent anywhere. A postcode you enter on the waiting times page is sent to postcodes.io to find your area.</p></div>
+      <div class="card" id="privacy"><h2 class="title-1">Privacy</h2><p class="body-6 soft">This site sets no cookies and has no accounts. Your answers to the five questions stay in your browser and are not stored or sent anywhere. Anything you type into Jarvis also stays in your browser. A postcode you enter on the waiting times page, or when you tick the box to name your NHS area in a Jarvis MP letter, is sent to postcodes.io to find your area.</p></div>
       <div class="card" id="terms"><h2 class="title-1">Terms</h2><p class="body-6 soft">This site gives information only and is not medical advice. It is not an NHS service and is not endorsed by one. Check each service on its own page before relying on it. In an emergency call 999.</p></div>
     </div>
+  </div>
+</div>
+
+<!-- ============ JARVIS ============ -->
+<div class="page" data-page="jarvis" hidden>
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow caption-3">JARVIS</p>
+      <h1 class="heading-2 grad">Jarvis, your guide while you wait</h1>
+      <p class="soft body-3">Describe how you feel, check in with two NHS questionnaires, and write letters that ask your GP and MP the right questions. It is a simple rule based guide, not an AI chatbot and not a clinician. It gives information, not medical advice.</p>
+    </header>
+    <div class="notice alert body-5" role="note" style="margin-bottom:24px"><svg class="i" viewBox="0 0 256 256" aria-hidden="true"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm39.1,131.79a47.84,47.84,0,0,0,0-55.58l28.5-28.49a87.83,87.83,0,0,1,0,112.56ZM96,128a32,32,0,1,1,32,32A32,32,0,0,1,96,128Zm88.28-67.6L155.79,88.9a47.84,47.84,0,0,0-55.58,0L71.72,60.4a87.83,87.83,0,0,1,112.56,0ZM60.4,71.72l28.5,28.49a47.84,47.84,0,0,0,0,55.58L60.4,184.28a87.83,87.83,0,0,1,0-112.56ZM71.72,195.6l28.49-28.5a47.84,47.84,0,0,0,55.58,0l28.49,28.5a87.83,87.83,0,0,1-112.56,0Z"/></svg><span><b class="body-4">Need to talk to someone right now?</b> Samaritans 116 123 (free, 24/7) · text SHOUT to 85258 · call 111 and choose the mental health option · 999 if you are in immediate danger.</span></div>
+    <div class="tabs" role="tablist" aria-label="Jarvis tools" id="jv-tabs"></div>
+    <div id="jv-panel" role="tabpanel" aria-live="polite" style="padding-bottom:48px"></div>
+    <div class="notice body-6" style="margin-bottom:48px"><svg class="i" viewBox="0 0 256 256" aria-hidden="true"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"/></svg><span>Nothing you type here is saved or sent anywhere. Your questionnaire scores last only while this page is open. A postcode is only sent to postcodes.io if you tick the box in the MP letter.</span></div>
   </div>
 </div>
 
@@ -765,6 +805,342 @@
   </div>
 </footer>
 
+<script id="jarvis-engine">
+/* ---------- Jarvis engine ----------
+   A port of jarvis_engine.py. Pure functions with no page code, so it can be tested on its own
+   (see test_site_parity.py). It is a RULE BASED guide: it matches words and applies fixed rules.
+   It is not an AI model, it cannot diagnose, and nothing a person types is stored or sent anywhere.
+   The only network call is lookupIcb(), which sends one postcode to the open postcodes.io service. */
+(function (root) {
+  'use strict';
+
+  var CRISIS_CONTACTS = [
+    ['Samaritans', 'call 116 123 (free, 24/7)'],
+    ['Shout', 'text SHOUT to 85258 (free, 24/7)'],
+    ['NHS 111', 'call 111 and choose option 2 for urgent mental health help'],
+    ['Emergency', 'if you are in immediate danger call 999 or go to A&E']
+  ];
+
+  /* Phones type curly apostrophes and special dashes; a word list that ignores that quietly misses people. */
+  function normalise(text) {
+    text = String(text == null ? '' : text);
+    if (text.normalize) text = text.normalize('NFKC');
+    text = text.replace(/[‐-―−]/g, '-').replace(/[‘’‚‛′ʼ]/g, "'").replace(/[​‌‍⁠﻿]/g, '');
+    return text.toLowerCase().split(/\s+/).filter(Boolean).join(' ');
+  }
+
+  /* Whole word patterns. A safety NET, not a guarantee: it misses some wording and fires on some innocent
+     sentences, on purpose (better to show help once too often). */
+  var CRISIS_REGEXES = [
+    /\bsuicid(?:e|al)\b/,
+    /\bkill(?:ing)?\s+my\s?self\b/,
+    /\bend(?:ing)?\s+(?:my\s+(?:own\s+)?life|it\s+all)\b/,
+    /\btak(?:e|ing)\s+my\s+(?:own\s+)?life\b/,
+    /\bself[\s-]?(?:harm|injur)\w*/,
+    /\b(?:hurt|harm|cut|injure)(?:ting|ing)?\s+my\s?self\b/,
+    /\bwant(?:ed|ing)?\s+to\s+die\b/,
+    /\bwanna\s+die\b/,
+    /\bwish\s+(?:i|that\s+i)\s+(?:was|were)\s+(?:dead|never\s+born)\b/,
+    /\bbetter\s+off\s+(?:dead|without\s+me)\b/,
+    /\b(?:do\s*n'?t|do\s+not|no\s+longer|not)\s+want\s+to\s+(?:be\s+here|live|be\s+alive|exist|wake\s+up)\b/,
+    /\bno\s+(?:point|reason)\s+(?:in\s+|to\s+)?(?:living|live|go(?:ing)?\s+on|being\s+alive)\b/,
+    /\b(?:life\s+)?(?:is\s*n'?t|is\s+not|not)\s+worth\s+living\b/,
+    /\bcan(?:'?t|not)\s+(?:go|carry)\s+on\b/,
+    /\boverdos(?:e|ed|ing)\b/,
+    /\bhang(?:ing)?\s+my\s?self\b/,
+    /\bslit(?:ting)?\s+my\s+(?:wrists?|throat)\b/,
+    /\bjump(?:ing)?\s+(?:off|in\s+front)\b/
+  ];
+
+  function detectCrisis(text) {
+    var clean = normalise(text), hits = [];
+    CRISIS_REGEXES.forEach(function (rx) { var m = rx.exec(clean); if (m) hits.push(m[0]); });
+    return { isCrisis: hits.length > 0, matched: hits };
+  }
+
+  /* Whole word stems. Substring matching caused real bugs: "eat" matched "treatment" (so everyone waiting for
+     treatment was sent to the eating disorder charity) and "now" matched "know" (so "I don't know" read as urgent). */
+  var TAG_REGEXES = {
+    anxiety: [/\banxi(?:ous|ety)\b/, /\bpanic\w*/, /\bworr(?:y|ied|ies|ying)\b/, /\bfears?\b/, /\boverthink\w*/, /\bheart\s+(?:racing|pounding)\b/, /\bon\s+edge\b/],
+    depression: [/\bdepress\w*/, /\blow\s+mood\b/, /\bhopeless\w*/, /\bnumb\b/, /\bempty\b/, /\bexhaust\w*/, /\bsad\b/, /\bno\s+motivation\b/],
+    trauma: [/\btrauma\w*/, /\bptsd\b/, /\bflashbacks?\b/, /\bnightmares?\b/, /\babus(?:e|ed|ive)\b/, /\bassault\w*/],
+    ocd: [/\bocd\b/, /\bobsess\w*/, /\bcompuls\w*/, /\bintrusive\s+thoughts?\b/, /\brituals?\b/],
+    grief: [/\bgrie(?:f|ving|ve)\b/, /\bbereave\w*/, /\bfuneral\b/, /\bpassed\s+away\b/, /\bdeath\s+of\b/,
+            /\blost\s+my\s+(?:mum|mom|dad|mother|father|husband|wife|partner|son|daughter|brother|sister|friend|child|baby)\b/],
+    eating: [/\beating\s+(?:disorder|problem|difficult\w*)\b/, /\bdisordered\s+eating\b/, /\banorex\w*/, /\bbulimi\w*/, /\bbing(?:e|eing)\b/, /\bpurg(?:e|ing)\b/, /\bbody\s+image\b/, /\bstopped\s+eating\b/],
+    relationships: [/\bpartner\b/, /\bmarriage\b/, /\brelationship\w*/, /\bdivorc\w*/, /\bbreak\s?up\b/, /\bseparat(?:ed|ion)\b/]
+  };
+  var TAG_ORDER = ['anxiety', 'depression', 'trauma', 'ocd', 'grief', 'eating', 'relationships'];
+  var TAG_LABELS = {
+    anxiety: 'Anxiety or panic', depression: 'Low mood or depression', trauma: 'Trauma or PTSD', ocd: 'OCD or intrusive thoughts',
+    grief: 'Grief or bereavement', eating: 'Eating difficulties', relationships: 'Relationship difficulties', general: 'General emotional wellbeing'
+  };
+  var URGENT_NOW = [/\btonight\b/, /\bright\s+now\b/, /\bemergency\b/, /\bcan'?t\s+take\s+(?:it|this)\b/];
+  var URGENT_SOON = [/\btoday\b/, /\bthis\s+week\b/, /\burgent(?:ly)?\b/, /\bgetting\s+worse\b/, /\bdeteriorat\w*/, /\bstruggling\s+at\s+work\b/];
+
+  function detectTags(text) {
+    var clean = normalise(text);
+    var tags = TAG_ORDER.filter(function (t) { return TAG_REGEXES[t].some(function (rx) { return rx.test(clean); }); });
+    return tags.length ? tags : ['general'];
+  }
+  function detectUrgency(text) {
+    var clean = normalise(text);
+    if (URGENT_NOW.some(function (rx) { return rx.test(clean); })) return 'immediate';
+    if (URGENT_SOON.some(function (rx) { return rx.test(clean); })) return 'elevated';
+    return 'standard';
+  }
+
+  /* ---- Matching organisations ---- */
+  var AGE_BANDS = ['Under 18', '18 to 25', '26 to 64', '65 and over'];
+  function cells(v) { return String(v == null ? '' : v).split(/[;,]/).map(function (p) { return p.trim().toLowerCase(); }).filter(Boolean); }
+  function speedRank(o) { var n = Math.trunc(Number(o.speed_rank)); return isNaN(n) ? 3 : n; }
+  function byRankThenName(a, b) { return (speedRank(a) - speedRank(b)) || (a.name < b.name ? -1 : a.name > b.name ? 1 : 0); }
+  function crisisOrganisations(orgs, limit) {
+    return orgs.filter(function (o) { return o.urgency_level === 'immediate'; }).sort(byRankThenName).slice(0, limit || 3);
+  }
+  function rankOrganisations(orgs, tags, urgency, ageBand, limit) {
+    var wanted = (tags && tags.length) ? tags : ['general'], scored = [];
+    orgs.forEach(function (org) {
+      var orgTags = cells(org.condition_tags), ages = cells(org.age_group);
+      if (ageBand && ages.indexOf('all ages') === -1 && ages.indexOf(ageBand.toLowerCase()) === -1) return;
+      var overlap = wanted.filter(function (t, i) { return orgTags.indexOf(t) !== -1 && wanted.indexOf(t) === i; });
+      var topic = overlap.length ? 5 * overlap.length : (orgTags.indexOf('general') !== -1 ? 2 : 0);
+      if (topic === 0) return;
+      var specialist = (overlap.length && orgTags.indexOf('general') === -1) ? 3 : 0;
+      var score = topic + specialist + (4 - speedRank(org)) * 2;
+      var isCrisisLine = org.urgency_level === 'immediate';
+      if (isCrisisLine && urgency === 'immediate') score += 20; else if (isCrisisLine) score -= 10;
+      var why = overlap.length ? 'Covers: ' + overlap.slice().sort().map(function (t) { return TAG_LABELS[t] || t; }).join(', ')
+                               : 'A general service that supports many kinds of difficulty';
+      var copy = {}; for (var k in org) copy[k] = org[k]; copy._why = why;
+      scored.push({ score: score, rank: speedRank(org), name: org.name || '', org: copy });
+    });
+    scored.sort(function (a, b) { return (b.score - a.score) || (a.rank - b.rank) || (a.name < b.name ? -1 : a.name > b.name ? 1 : 0); });
+    return scored.slice(0, limit || 3).map(function (s) { return s.org; });
+  }
+  function triage(text, orgs, ageBand) {
+    var crisis = detectCrisis(text);
+    if (crisis.isCrisis) return { crisis: crisis, tags: ['crisis'], urgency: 'immediate', matches: crisisOrganisations(orgs) };
+    var tags = detectTags(text), urgency = detectUrgency(text);
+    return { crisis: crisis, tags: tags, urgency: urgency, matches: rankOrganisations(orgs, tags, urgency, ageBand) };
+  }
+
+  /* ---- Questionnaires (PHQ-9, GAD-7) ---- */
+  var ANSWER_LABELS = ['Not at all', 'Several days', 'More than half the days', 'Nearly every day'];
+  var PHQ9_QUESTIONS = [
+    'Little interest or pleasure in doing things',
+    'Feeling down, depressed or hopeless',
+    'Trouble falling or staying asleep, or sleeping too much',
+    'Feeling tired or having little energy',
+    'Poor appetite or overeating',
+    'Feeling bad about yourself, or that you are a failure or have let yourself or your family down',
+    'Trouble concentrating on things, such as reading the newspaper or watching television',
+    'Moving or speaking so slowly that other people could have noticed, or the opposite: being so fidgety or restless that you have been moving around a lot more than usual',
+    'Thoughts that you would be better off dead, or of hurting yourself in some way'
+  ];
+  var GAD7_QUESTIONS = [
+    'Feeling nervous, anxious or on edge', 'Not being able to stop or control worrying', 'Worrying too much about different things',
+    'Trouble relaxing', 'Being so restless that it is hard to sit still', 'Becoming easily annoyed or irritable',
+    'Feeling afraid, as if something awful might happen'
+  ];
+  var PHQ9_BANDS = [[4, 'Minimal'], [9, 'Mild'], [14, 'Moderate'], [19, 'Moderately severe'], [27, 'Severe']];
+  var GAD7_BANDS = [[4, 'Minimal'], [9, 'Mild'], [14, 'Moderate'], [21, 'Severe']];
+  var SCREENING_DISCLAIMER = 'This is a screening questionnaire, not a diagnosis. Only a health professional can assess how you are.';
+
+  function checkAnswers(answers, expected) {
+    if (!answers || answers.length !== expected) throw new Error('Expected ' + expected + ' answers, got ' + (answers ? answers.length : 0) + '.');
+    return answers.map(function (a) {
+      if (typeof a !== 'number' || a % 1 !== 0 || a < 0 || a > 3) throw new Error('Each answer must be a whole number from 0 to 3, got ' + a + '.');
+      return a;
+    });
+  }
+  function band(score, bands) { for (var i = 0; i < bands.length; i++) if (score <= bands[i][0]) return bands[i][1]; }
+  function guidance(severity) {
+    var base;
+    if (severity === 'Minimal') base = 'Your answers suggest few symptoms at the moment. If you are still worried about how you feel, speak to your GP.';
+    else if (severity === 'Mild') base = 'Your answers suggest mild symptoms. Self-help can be a good start, and you can speak to your GP or refer yourself to NHS Talking Therapies if things do not improve.';
+    else if (severity === 'Moderate') base = 'Your answers suggest it is worth speaking to your GP, or referring yourself to NHS Talking Therapies. You can do this while you wait for other support.';
+    else base = 'Your answers suggest you are having a hard time. Please arrange to speak to your GP soon, and use the crisis contacts if you ever feel unsafe.';
+    return base + ' ' + SCREENING_DISCLAIMER;
+  }
+  function sum(a) { return a.reduce(function (x, y) { return x + y; }, 0); }
+  function scorePhq9(answers) {
+    var v = checkAnswers(answers, 9), total = sum(v), sev = band(total, PHQ9_BANDS);
+    return { score: total, maxScore: 27, severity: sev, guidance: guidance(sev), safetyFlag: v[8] > 0 };
+  }
+  function scoreGad7(answers) {
+    var v = checkAnswers(answers, 7), total = sum(v), sev = band(total, GAD7_BANDS);
+    return { score: total, maxScore: 21, severity: sev, guidance: guidance(sev), safetyFlag: false };
+  }
+
+  /* ---- Postcode to NHS area (postcodes.io) ---- */
+  function normalisePostcode(raw) {
+    var cleaned = String(raw == null ? '' : raw).toUpperCase().replace(/\s+/g, '');
+    if (cleaned.length < 5 || cleaned.length > 7) return null;
+    var outward = cleaned.slice(0, -3), inward = cleaned.slice(-3);
+    if (/^[A-Z]{1,2}\d[A-Z\d]?$/.test(outward) && /^\d[A-Z]{2}$/.test(inward)) return outward + ' ' + inward;
+    return null;
+  }
+  /* Never throws: every failure comes back as ok:false with a reason. fetchFn is injectable for tests. */
+  function lookupIcb(raw, fetchFn, timeoutMs) {
+    var pc = normalisePostcode(raw);
+    if (!pc) return Promise.resolve({ ok: false, postcode: null, reason: 'invalid' });
+    var f = fetchFn || (typeof fetch === 'function' ? fetch : null);
+    if (!f) return Promise.resolve({ ok: false, postcode: pc, reason: 'unavailable' });
+    var timer, timeout = new Promise(function (res) { timer = setTimeout(function () { res({ ok: false, postcode: pc, reason: 'unavailable' }); }, timeoutMs || 6000); });
+    var request = Promise.resolve().then(function () { return f('https://api.postcodes.io/postcodes/' + encodeURIComponent(pc)); }).then(function (res) {
+      if (res.status === 404) return { ok: false, postcode: pc, reason: 'not_found' };
+      if (res.status !== 200) return { ok: false, postcode: pc, reason: 'unavailable' };
+      return res.json().then(function (j) {
+        var r = (j && j.result) || {};
+        if (r.country && r.country !== 'England') return { ok: false, postcode: pc, reason: 'not_england' };
+        if (!r.icb) return { ok: false, postcode: pc, reason: 'no_icb' };
+        return { ok: true, postcode: pc, reason: '', icbName: r.icb, district: r.admin_district || null };
+      });
+    }).catch(function () { return { ok: false, postcode: pc, reason: 'unavailable' }; });
+    return Promise.race([request, timeout]).then(function (r) { clearTimeout(timer); return r; });
+  }
+  var LOOKUP_MESSAGES = {
+    invalid: 'That does not look like a UK postcode.', not_found: 'That postcode was not found.',
+    not_england: 'That postcode is not in England, and this tool only covers England.',
+    no_icb: 'No NHS area was listed for that postcode.', unavailable: 'The postcode service could not be reached just now.'
+  };
+
+  /* ---- Letters: plain text, written only from what the person tells us ---- */
+  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  function cleanText(value, maxLen) {
+    var s = String(value == null ? '' : value).replace(/[\x00-\x08\x0b-\x1f\x7f]/g, '');
+    s = s.split(/\s+/).filter(Boolean).join(' ');
+    return Array.from(s).slice(0, maxLen == null ? 300 : maxLen).join('');
+  }
+  function dateText(d) { d = d || new Date(); var day = d.getDate(); return (day < 10 ? '0' : '') + day + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear(); }
+  function weeksOf(v) { var n = Math.floor(Number(v) || 0); return n < 0 ? 0 : n; }
+  function scoresSentence(phq9, gad7) {
+    var parts = [];
+    if (phq9 != null) parts.push('PHQ-9 (low mood) ' + phq9 + ' out of 27');
+    if (gad7 != null) parts.push('GAD-7 (anxiety) ' + gad7 + ' out of 21');
+    if (!parts.length) return '';
+    return 'I completed two online screening questionnaires. My scores were ' + parts.join(' and ') + '. I understand these are not a diagnosis.';
+  }
+  function gpLetter(p) {
+    var name = cleanText(p.patientName, 80) || '[your name]', surgery = cleanText(p.gpSurgery, 120) || 'My GP practice';
+    var condition = cleanText(p.condition, 120) || 'my mental health', impact = cleanText(p.impact, 300), provider = cleanText(p.preferredProvider, 120);
+    var lines = ['Date: ' + dateText(p.today), 'To: ' + surgery, 'From: ' + name,
+      'Subject: Support while I wait for NHS mental health care, and my choices', '', 'Dear Doctor,', '',
+      'I am writing about my mental health. I am struggling with ' + condition + ' and I have been waiting about ' + weeksOf(p.weeksWaiting) + ' weeks for NHS support.'];
+    if (impact) lines.push('This is affecting my daily life: ' + impact);
+    var sc = scoresSentence(p.phq9, p.gad7); if (sc) lines.push('', sc);
+    lines.push('', 'I would be grateful if you could:',
+      '1. Review whether my referral should be prioritised, because the wait is affecting my life.',
+      '2. Tell me what support is available while I wait, and who to contact if things get worse.',
+      '3. Explain my choices. I understand the NHS Choice Framework gives patients legal rights to choose where to go for a first outpatient appointment when a GP refers them, and to ask to be moved to a different provider if they are likely to wait longer than the maximum waiting time. Please tell me whether either right applies to my situation.');
+    if (provider) lines.push('4. I would like to be considered for referral to ' + provider + ', if that is appropriate.');
+    lines.push('', 'Thank you for your help.', '', 'Yours sincerely,', name);
+    return lines.join('\n');
+  }
+  function mpLetter(p) {
+    var name = cleanText(p.constituentName, 80) || '[your name]', mp = cleanText(p.mpName, 80), condition = cleanText(p.condition, 120) || 'my mental health';
+    var pc = normalisePostcode(p.postcode) || cleanText(p.postcode, 10).toUpperCase() || '[your postcode]';
+    var area = p.icbName ? ' (' + cleanText(p.icbName, 120) + ')' : '';
+    return ['Date: ' + dateText(p.today), 'To: ' + (mp || 'My Member of Parliament') + ', House of Commons, London SW1A 0AA', 'From: ' + name + ', ' + pc,
+      'Subject: Long waits for NHS mental health support in my area', '', 'Dear ' + (mp || 'Member of Parliament') + ',', '',
+      'I am one of your constituents. I have been waiting about ' + weeksOf(p.weeksWaiting) + ' weeks for NHS support for ' + condition + '.', '',
+      'I would be grateful if you would:',
+      '1. Ask our Integrated Care Board' + area + ' for the current waiting times for NHS Talking Therapies and other mental health services in our area, and what is being done to shorten them.',
+      "2. Ask the Department of Health and Social Care how mental health is being given equal priority with physical health ('parity of esteem').",
+      '3. Tell me what help your office can offer to people who are waiting.', '', 'Thank you for your time.', '', 'Yours sincerely,', name].join('\n');
+  }
+  function sbarBriefing(p) {
+    var name = cleanText(p.patientName, 80) || 'The patient', symptoms = cleanText(p.symptoms, 200) || 'not stated', request = cleanText(p.request, 200) || 'not stated';
+    var scores = scoresSentence(p.phq9, p.gad7) || 'No questionnaire scores recorded.', item9 = p.phq9Item9, risk;
+    if (item9 == null) risk = 'Not assessed by this tool. Please ask me about risk.';
+    else if (item9 > 0) risk = "On the PHQ-9 I answered '" + ANSWER_LABELS[item9] + "' to the question about thoughts of being better off dead or of hurting myself. Please ask me about this.";
+    else risk = "On the PHQ-9 I answered 'Not at all' to the question about thoughts of being better off dead or of hurting myself.";
+    return ['2-MINUTE GP BRIEFING (SBAR). Written by the patient from their own answers.', '',
+      'S (Situation): ' + name + ' is struggling with ' + symptoms + '.',
+      'B (Background): symptoms have lasted ' + (cleanText(p.duration, 60) || 'not stated') + '. Effect on work or daily life: ' + (cleanText(p.impact, 300) || 'not stated') + '.',
+      'A (Assessment, my own view): ' + scores + ' Risk: ' + risk,
+      'R (Request): ' + request + '.'].join('\n');
+  }
+
+  /* ---- Money: plain arithmetic on the person's own numbers ----
+     Source: GOV.UK https://www.gov.uk/statutory-sick-pay/what-youll-get, checked 18 November 2026:
+     "£123.25 a week Statutory Sick Pay or 80% of your normal weekly earnings, whichever is lower. It's paid for up to 28 weeks."
+     These change each April: re-check them every year. */
+  var SSP = { weeklyRate: 123.25, earningsShare: 0.8, maxWeeks: 28, sourceUrl: 'https://www.gov.uk/statutory-sick-pay/what-youll-get', checked: '18 November 2026' };
+  var INCOME_SCENARIOS = { ssp: 'Off sick, on Statutory Sick Pay only', reduced_hours: 'Working fewer hours', left_job: 'Had to leave my job' };
+  function round2(x) { return Math.round((x + Number.EPSILON) * 100) / 100; }
+  function estimateIncomeImpact(annualSalary, scenario, weeks, reducedHoursPct) {
+    reducedHoursPct = reducedHoursPct || 0;
+    if (!INCOME_SCENARIOS.hasOwnProperty(scenario)) throw new Error('Unknown scenario ' + scenario + '.');
+    if (!(annualSalary >= 0 && annualSalary <= 1000000)) throw new Error('Salary must be between 0 and 1,000,000.');
+    if (!(weeks >= 0 && weeks <= 260)) throw new Error('Weeks must be between 0 and 260.');
+    if (!(reducedHoursPct >= 0 && reducedHoursPct <= 100)) throw new Error('Hours reduction must be between 0 and 100 per cent.');
+    var weekly = annualSalary / 52, lost, notes;
+    if (scenario === 'ssp') {
+      var sspWeeks = Math.min(weeks, SSP.maxWeeks), paid = Math.min(SSP.weeklyRate, SSP.earningsShare * weekly);
+      lost = sspWeeks * (weekly - paid) + Math.max(weeks - SSP.maxWeeks, 0) * weekly;
+      notes = ['Uses the statutory minimum only: £' + SSP.weeklyRate.toFixed(2) + ' a week or 80% of weekly earnings, whichever is lower, for up to ' + SSP.maxWeeks + ' weeks (GOV.UK, checked ' + SSP.checked + ').',
+        'Your employer may pay more than this. Check your contract.',
+        'After 28 weeks Statutory Sick Pay stops. Other support, such as Universal Credit, may be available.'];
+    } else if (scenario === 'reduced_hours') {
+      lost = weeks * weekly * reducedHoursPct / 100; notes = ['Assumes your pay falls in proportion to your hours.'];
+    } else {
+      lost = weeks * weekly; notes = ['Shows pay you would normally receive, before any benefits you may be able to claim.'];
+    }
+    return { weeklyGross: round2(weekly), totalLost: round2(lost), notes: notes.concat(['All figures are gross (before tax) and are estimates, not advice.']) };
+  }
+
+  /* ---- Static guidance: cautious wording, each item links to the official page, no amounts that go out of date ---- */
+  var CHOICE_LINKS = [
+    ['NHS England: your legal rights to choice', 'https://www.england.nhs.uk/personalisedcare/choice/'],
+    ['NHS: your choices in the NHS', 'https://www.nhs.uk/using-the-nhs/about-the-nhs/your-choices-in-the-nhs/'],
+    ['NHS: find an NHS Talking Therapies service (you can refer yourself)', 'https://www.nhs.uk/service-search/mental-health/find-an-nhs-talking-therapies-service/']
+  ];
+  /* Providers whose own pages describe NHS Right to Choose referrals. Checked 18 November 2026. They offer autism and ADHD
+     assessments. Right to Choose is NOT a way around a long wait for talking therapy, which you can self-refer to directly. */
+  var RIGHT_TO_CHOOSE_PROVIDERS = [
+    { name: 'Psychiatry-UK', url: 'https://psychiatry-uk.com/right-to-choose/', says: 'NHS-funded ADHD assessments online, with a GP referral in England.' },
+    { name: 'ProblemShared', url: 'https://www.problemshared.net/right-to-choose', says: 'NHS-funded online autism and ADHD assessments and post-diagnostic support, through Right to Choose.' },
+    { name: 'Clinical Partners', url: 'https://www.clinical-partners.co.uk/nhs-right-to-choose-assessments-and-medication/', says: 'NHS Right to Choose assessments for autism and ADHD, and an ADHD medication service.' }
+  ];
+  var RIGHT_TO_CHOOSE_CHECKED = '18 November 2026';
+  var WORKPLACE_GUIDE = [
+    { title: 'Access to Work', text: 'A government scheme that can help pay for support at work if you have a health condition or disability, including a mental health condition. Check who can apply and what help is available.',
+      links: [['GOV.UK: Access to Work', 'https://www.gov.uk/access-to-work']] },
+    { title: 'Reasonable adjustments at work', text: 'A mental health condition can count as a disability under the Equality Act 2010 if it has a substantial and long-term effect on your day-to-day life. If it does, your employer has a duty to consider reasonable adjustments. Whether yours counts depends on your circumstances.',
+      links: [['GOV.UK: definition of disability', 'https://www.gov.uk/definition-of-disability-under-equality-act-2010'], ['Acas: reasonable adjustments', 'https://www.acas.org.uk/reasonable-adjustments'], ['GOV.UK: your rights as a disabled person', 'https://www.gov.uk/rights-disabled-person']] },
+    { title: 'Sick pay', text: 'Statutory Sick Pay may be paid by your employer if you are eligible. The rate changes each April, so check the current figure. Some employers pay more than the minimum.',
+      links: [['GOV.UK: Statutory Sick Pay', 'https://www.gov.uk/statutory-sick-pay'], ['GOV.UK: sick pay for employers and employees', 'https://www.gov.uk/employers-sick-pay']] },
+    { title: 'Benefits that may help', text: 'Depending on your situation you may be able to claim Universal Credit or Personal Independence Payment. Use the official pages to check, and consider talking to an adviser.',
+      links: [['GOV.UK: Universal Credit', 'https://www.gov.uk/universal-credit'], ['GOV.UK: Personal Independence Payment', 'https://www.gov.uk/pip']] }
+  ];
+  var COPING_TOOLKIT = [
+    { title: 'Breathing exercise', text: 'Slow, steady breathing can help when you feel tense or panicky. The NHS has a step-by-step guide.', link: ['NHS: breathing exercises for stress', 'https://www.nhs.uk/mental-health/self-help/guides-tools-and-activities/breathing-exercises-for-stress/'] },
+    { title: 'Grounding: 5-4-3-2-1', text: 'Look around and name 5 things you can see, 4 you can touch, 3 you can hear, 2 you can smell and 1 you can taste. It gives your mind something steady to focus on.' },
+    { title: 'A set time for worry', text: 'Pick a short slot each day for worries. If one appears earlier, jot it down and come back to it then.' },
+    { title: 'Small daily habits', text: 'The NHS five steps to mental wellbeing are a simple place to start.', link: ['NHS: 5 steps to mental wellbeing', 'https://www.nhs.uk/mental-health/self-help/guides-tools-and-activities/five-steps-to-mental-wellbeing/'] }
+  ];
+  var DETERIORATION_FLAGS = [
+    'Not sleeping for several nights in a row.', 'Not being able to eat or look after yourself.',
+    'Thoughts of harming yourself, ending your life, or that others would be better off without you.',
+    'Panic attacks that are getting more frequent or more severe.', 'Pulling away from work, family and friends.'
+  ];
+  var DETERIORATION_ADVICE = 'If any of these apply, do not wait for your appointment. Contact your GP surgery and ask for an urgent review, call NHS 111 and choose option 2, or use the crisis contacts above.';
+
+  root.JarvisEngine = {
+    CRISIS_CONTACTS: CRISIS_CONTACTS, normalise: normalise, detectCrisis: detectCrisis, detectTags: detectTags, detectUrgency: detectUrgency,
+    TAG_LABELS: TAG_LABELS, TAG_ORDER: TAG_ORDER, AGE_BANDS: AGE_BANDS, crisisOrganisations: crisisOrganisations, rankOrganisations: rankOrganisations, triage: triage,
+    ANSWER_LABELS: ANSWER_LABELS, PHQ9_QUESTIONS: PHQ9_QUESTIONS, GAD7_QUESTIONS: GAD7_QUESTIONS, SCREENING_DISCLAIMER: SCREENING_DISCLAIMER,
+    scorePhq9: scorePhq9, scoreGad7: scoreGad7, normalisePostcode: normalisePostcode, lookupIcb: lookupIcb, LOOKUP_MESSAGES: LOOKUP_MESSAGES,
+    cleanText: cleanText, gpLetter: gpLetter, mpLetter: mpLetter, sbarBriefing: sbarBriefing,
+    SSP: SSP, INCOME_SCENARIOS: INCOME_SCENARIOS, estimateIncomeImpact: estimateIncomeImpact,
+    CHOICE_LINKS: CHOICE_LINKS, RIGHT_TO_CHOOSE_PROVIDERS: RIGHT_TO_CHOOSE_PROVIDERS, RIGHT_TO_CHOOSE_CHECKED: RIGHT_TO_CHOOSE_CHECKED,
+    WORKPLACE_GUIDE: WORKPLACE_GUIDE, COPING_TOOLKIT: COPING_TOOLKIT, DETERIORATION_FLAGS: DETERIORATION_FLAGS, DETERIORATION_ADVICE: DETERIORATION_ADVICE
+  };
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+
 <script>
 (function () {
   'use strict';
@@ -796,15 +1172,15 @@
   function arrivalCheck() {
     var seen = false;
     try { seen = sessionStorage.getItem('mhn-sos') === '1'; sessionStorage.setItem('mhn-sos', '1'); } catch (e) {}
-    if (!seen) setTimeout(function () { if (window.innerWidth > 720) openSos('', false); else { sos.classList.remove('nudge'); void sos.offsetWidth; sos.classList.add('nudge'); } }, 900);
+    if (!seen) setTimeout(function () { openSos('', false); }, 900);
   }
   var YOUNG = '<div class="notice warn young body-6">' + '<svg class="i" viewBox="0 0 256 256" aria-hidden="true"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"/></svg>' + '<span><b class="body-4">Under 19?</b> Childline is free on 0800 1111 and the number does not show on your phone bill. Papyrus HOPELINE247 supports young people on 0800 068 4141, or text HOPE to 88247.</span></div>';
 
   /* ---------- Routing ---------- */
   var pages = document.querySelectorAll('.page');
   var root = document.documentElement;
-  var routes = ['home', 'plan', 'support', 'waiting-times', 'the-cost', 'about'];
-  var titles = { home: 'Mental Health Navigator', plan: 'Your waiting plan', support: 'Support', 'waiting-times': 'Waiting times', 'the-cost': 'The cost', about: 'About', 'not-found': 'Page not found' };
+  var routes = ['home', 'plan', 'support', 'jarvis', 'waiting-times', 'the-cost', 'about'];
+  var titles = { home: 'Mental Health Navigator', plan: 'Your waiting plan', support: 'Support', jarvis: 'Jarvis', 'waiting-times': 'Waiting times', 'the-cost': 'The cost', about: 'About', 'not-found': 'Page not found' };
   // Inside Streamlit the site runs in an about:srcdoc frame, where "#page" links
   // would reload the Streamlit app. There, pages switch in memory instead.
   var srcdoc = !/^https?:$/.test(location.protocol);
@@ -837,6 +1213,7 @@
     setMenu(false);
     window.scrollTo(0, 0);
     if (r === 'home') armHome();
+    if (r === 'jarvis') renderJarvis();
     if (r === 'plan' && state.step === 0 && !Object.keys(state.answers).length) openSos('Before you start: if this is an emergency, use these now.', false);
   }
   window.addEventListener('hashchange', show);
@@ -963,7 +1340,6 @@
       '<h1 class="heading-3">' + (urgent ? 'Support that answers now' : 'Your matches') + '</h1>' +
       '<div class="answers caption-5">' + QUESTIONS.map(function (Q) { return '<span>' + esc(A[Q.key]) + '</span>'; }).join('') + '</div>';
     if (urgent) html += '<div class="notice alert body-5">' + icon('lifebuoy') + '<span>You said you need support now. These services answer straight away, day or night. If someone\'s life is at risk, or you cannot keep yourself safe, call 999 or go to A&amp;E.</span></div>';
-    html += '<p class="caption-5 muted">These are national options. Local listings cover Berkshire West only, as a Reading pilot, and are on the Support page.</p>';
     if (A.age === 'Under 18') html += YOUNG;
     if (!m.length) {
       html += '<div class="card"><span class="ic planned">' + icon('magnifying-glass') + '</span><h2 class="title-2">No exact match for those answers</h2><p class="body-6 soft">Try widening cost or format. Hub of Hope lists local services by postcode across the UK.</p><div class="row"><button class="btn primary button-sm" type="button" data-act="edit">Change answers</button><a class="btn button-sm" href="https://hubofhope.co.uk" target="_blank" rel="noopener">Open Hub of Hope ' + icon('arrow-up-right', true) + '</a></div></div>';
@@ -1148,6 +1524,299 @@
       } catch (e) { msg.textContent = 'Select the address and copy it with your keyboard.'; }
     });
   });
+
+
+  /* ---------- Jarvis page ---------- */
+  var JE = window.JarvisEngine;
+  window.__jarvis = JE;
+  var JV_TOOLS = [['talk', 'Talk it through'], ['quiz', 'Questionnaires'], ['wait', 'While you wait'], ['choices', 'Your choices'], ['gp', 'GP letter'],
+                  ['sbar', 'GP briefing'], ['work', 'Work and money'], ['calc', 'Sick leave cost'], ['mp', 'MP letter']];
+  var jv = { tool: 'talk', quiz: 'phq9', rendered: false, scores: { phq9: null, gad7: null, item9: null }, triage: null, topics: null, topicsFor: null, forms: {}, letters: {} };
+  var jvTabs = document.getElementById('jv-tabs'), jvPanel = document.getElementById('jv-panel');
+
+  function jvIntro(text) { return '<p class="body-3 soft" style="max-width:680px;margin-bottom:24px">' + text + '</p>'; }
+  function jvNotice(kind, ic, html) { return '<div class="notice ' + kind + ' body-6">' + icon(ic) + '<span>' + html + '</span></div>'; }
+  function jvCrisisList() { return '<ul class="crisis-lines body-6">' + JE.CRISIS_CONTACTS.map(function (c) { return '<li><b>' + esc(c[0]) + ':</b> ' + esc(c[1]) + '</li>'; }).join('') + '</ul>'; }
+  function jvCrisisNotice() {
+    return '<div class="notice alert body-5">' + icon('lifebuoy') + '<span><b class="body-4">It sounds like you may be going through something very hard right now. You do not have to cope with it alone.</b>' + jvCrisisList() + '</span></div>';
+  }
+  function jvLink(label, url) { return '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(label) + ' ' + icon('arrow-up-right', true) + '</a>'; }
+  function jvOrgCard(o) {
+    return '<article class="card match"><h3 class="heading-6"><a href="' + esc(o.url) + '" target="_blank" rel="noopener">' + esc(o.name) + ' ' + icon('arrow-up-right', true) + '</a></h3>' +
+      '<p class="body-6 soft">' + esc(o.description) + '</p>' +
+      (o.why_suits ? '<p class="why body-6"><b class="body-4">Why this may suit you: </b>' + esc(o.why_suits) + '</p>' : '') +
+      '<div class="meta caption-1"><span class="chip">' + esc(costLabel(o)) + '</span>' + String(o.format_tags).split(',').map(function (t) { return '<span class="chip neutral">' + esc(t === 'in-person' ? 'In person' : t.charAt(0).toUpperCase() + t.slice(1)) + '</span>'; }).join('') +
+      (o._why ? '<span class="chip neutral">' + esc(o._why) + '</span>' : '') + '</div>' +
+      '<p class="caption-5 muted">Last checked: ' + esc(o.verified_date) + '</p></article>';
+  }
+  function focusEl(el) { if (el) { el.setAttribute('tabindex', '-1'); el.focus(); } }
+  function fval(kind, id, def) { var f = jv.forms[kind]; return f && f[id] != null ? f[id] : def; }
+  function saveForm(kind, form) {
+    var o = {};
+    Array.prototype.forEach.call(form.querySelectorAll('input, select, textarea'), function (el) { if (!el.id) return; o[el.id] = el.type === 'checkbox' ? el.checked : el.value; });
+    jv.forms[kind] = o; return o;
+  }
+  function optionsHtml(list, selected) { return list.map(function (x) { return '<option' + (x === selected ? ' selected' : '') + '>' + esc(x) + '</option>'; }).join(''); }
+  var CONDITIONS = JE.TAG_ORDER.map(function (t) { return JE.TAG_LABELS[t]; }).concat(['Something else']);
+  function safeName(s) { s = String(s || '').replace(/[^A-Za-z0-9_-]+/g, '_').replace(/^_+|_+$/g, ''); return s || ''; }
+
+  /* Tabs */
+  function renderJvTabs() {
+    jvTabs.innerHTML = JV_TOOLS.map(function (t) { return '<button class="tab button-sm" role="tab" type="button" id="jvtab-' + t[0] + '" data-k="' + t[0] + '" aria-selected="' + (t[0] === jv.tool) + '">' + esc(t[1]) + '</button>'; }).join('');
+  }
+  function setTool(k) {
+    jv.tool = k; renderJvTabs(); jvPanel.setAttribute('aria-labelledby', 'jvtab-' + k);
+    ({ talk: renderTalk, quiz: renderQuiz, wait: renderWait, choices: renderChoices, gp: renderGp, sbar: renderSbar, work: renderWork, calc: renderCalc, mp: renderMp })[k]();
+  }
+  jvTabs.addEventListener('click', function (e) { var t = e.target.closest('.tab'); if (t) setTool(t.getAttribute('data-k')); });
+  jvTabs.addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    var tabs = Array.prototype.slice.call(jvTabs.querySelectorAll('.tab')), i = tabs.indexOf(document.activeElement); if (i < 0) return;
+    var n = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length]; setTool(n.getAttribute('data-k')); document.getElementById('jvtab-' + n.getAttribute('data-k')).focus();
+  });
+  function renderJarvis() { if (jv.rendered) return; jv.rendered = true; setTool('talk'); }
+
+  /* 1. Talk it through */
+  function renderTalk() {
+    jvPanel.innerHTML = jvIntro('Tell me what is going on, in your own words. I read your words for common topics and suggest services. It is a simple word matcher, so please check the topics it picks and change them if it gets it wrong.') +
+      '<form class="card jv-form" id="jv-triage" novalidate>' +
+      '<div class="field"><label class="title-4" for="jv-text">What has been happening?</label><textarea id="jv-text" rows="5" maxlength="1500" placeholder="For example: I have had panic attacks at work and I am not sleeping."></textarea></div>' +
+      '<div class="field" style="max-width:320px"><label class="title-4" for="jv-age">Your age (optional)</label><select id="jv-age"><option value="">Prefer not to say</option>' + optionsHtml(JE.AGE_BANDS) + '</select></div>' +
+      '<div class="row"><button class="btn primary button-md" type="submit">Suggest services ' + icon('arrow-right', true) + '</button></div></form>' +
+      '<div id="jv-out" style="margin-top:24px;display:grid;gap:16px" aria-live="polite"></div>';
+    if (jv.triage) { document.getElementById('jv-text').value = jv.triage.text; document.getElementById('jv-age').value = jv.triage.age || ''; showTriage(false); }
+    document.getElementById('jv-triage').addEventListener('submit', function (e) {
+      e.preventDefault();
+      jv.triage = { text: document.getElementById('jv-text').value, age: document.getElementById('jv-age').value };
+      showTriage(true);
+    });
+  }
+  function showTriage(focus) {
+    var t = jv.triage, out = document.getElementById('jv-out');
+    if (!t.text.trim()) { out.innerHTML = jvNotice('warn', 'info', 'Please write a few words first.'); return; }
+    var r = JE.triage(t.text, ORGS, t.age || null);
+    if (r.crisis.isCrisis) {
+      openSos('Your words suggest you may be going through something very hard. Use these now.', false);
+      out.innerHTML = jvCrisisNotice() + '<h2 class="heading-6" id="jv-h">Support that is open now</h2>' + r.matches.map(jvOrgCard).join('');
+      if (focus) focusEl(document.getElementById('jv-h'));
+      return;
+    }
+    if (jv.topicsFor !== t.text) { jv.topicsFor = t.text; jv.topics = r.tags.filter(function (x) { return x !== 'general'; }); }
+    var html = '<div class="notice ok body-6">' + icon('check-circle') + '<span><b class="body-4">Topics I picked up.</b> Change these if I got it wrong.</span></div>' +
+      '<div class="q"><fieldset><legend class="caption-3 muted">TOPICS</legend><div class="checks">' + JE.TAG_ORDER.map(function (tag) {
+        return '<label class="opt pill body-5" for="jvt-' + tag + '"><input type="checkbox" id="jvt-' + tag + '" value="' + tag + '"' + (jv.topics.indexOf(tag) !== -1 ? ' checked' : '') + '><span class="dot"></span><span>' + esc(JE.TAG_LABELS[tag]) + '</span></label>';
+      }).join('') + '</div></fieldset></div>';
+    if (r.urgency === 'immediate') {
+      openSos('You said you need help soon. These services are open day and night.', false);
+      html += jvNotice('warn', 'info', 'You said you need help soon. These services are open day and night:') + JE.crisisOrganisations(ORGS).map(jvOrgCard).join('') + '<h2 class="heading-6">Other services that may help</h2>';
+    } else if (r.urgency === 'elevated') {
+      html += jvNotice('warn', 'info', 'You said things are getting harder. If that changes, use the crisis contacts above, and ask your GP for an urgent review.');
+    }
+    html += '<div id="jv-matches" style="display:grid;gap:16px"></div>';
+    out.innerHTML = html;
+    function drawMatches() {
+      var topics = jv.topics.length ? jv.topics : ['general'];
+      var ranked = JE.rankOrganisations(ORGS, topics, 'standard', t.age || null, 6).filter(function (o) { return o.urgency_level !== 'immediate'; }).slice(0, 3);
+      document.getElementById('jv-matches').innerHTML = ranked.length ? ranked.map(jvOrgCard).join('') :
+        '<div class="card"><span class="ic planned">' + icon('magnifying-glass') + '</span><h3 class="title-2">No close match</h3><p class="body-6 soft">Hub of Hope lists local services by postcode across the UK.</p><div class="row"><a class="btn button-sm" href="https://hubofhope.co.uk" target="_blank" rel="noopener">Open Hub of Hope ' + icon('arrow-up-right', true) + '</a></div></div>';
+    }
+    drawMatches();
+    out.querySelector('.checks').addEventListener('change', function () {
+      jv.topics = JE.TAG_ORDER.filter(function (tag) { return document.getElementById('jvt-' + tag).checked; }); drawMatches();
+    });
+  }
+
+  /* 2. Questionnaires */
+  function renderQuiz() {
+    var isPhq = jv.quiz === 'phq9', qs = isPhq ? JE.PHQ9_QUESTIONS : JE.GAD7_QUESTIONS;
+    jvPanel.innerHTML = jvIntro('The PHQ-9 and GAD-7 are two short questionnaires that GPs and NHS Talking Therapies use to see how low mood and anxiety are affecting you. ' + esc(JE.SCREENING_DISCLAIMER)) +
+      '<div class="tabs" role="group" aria-label="Which questionnaire" style="margin-bottom:16px"><button class="tab button-sm" type="button" data-quiz="phq9" aria-pressed="' + isPhq + '">PHQ-9: low mood</button><button class="tab button-sm" type="button" data-quiz="gad7" aria-pressed="' + !isPhq + '">GAD-7: anxiety</button></div>' +
+      '<form class="jv-form" id="jv-quiz" novalidate><p class="title-3">Over the last 2 weeks, how often have you been bothered by the following?</p>' +
+      qs.map(function (q, i) {
+        return '<fieldset class="qi" id="jvqi-' + i + '"><legend class="body-2">' + (i + 1) + '. ' + esc(q) + '</legend><div class="opts four">' + JE.ANSWER_LABELS.map(function (lab, v) {
+          return '<label class="opt compact body-5" for="jvq' + i + '_' + v + '"><input type="radio" name="q' + i + '" id="jvq' + i + '_' + v + '" value="' + v + '"><span class="dot"></span><span>' + esc(lab) + '</span></label>';
+        }).join('') + '</div></fieldset>';
+      }).join('') +
+      '<p class="field-error caption-1" id="jv-qerr" aria-live="polite"></p><div class="row"><button class="btn primary button-md" type="submit">Score my answers ' + icon('arrow-right', true) + '</button></div></form>' +
+      '<div id="jv-qout" style="margin-top:24px;display:grid;gap:16px" aria-live="polite"></div>';
+    document.getElementById('jv-quiz').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var answers = [], missing = [];
+      qs.forEach(function (q, i) {
+        var c = document.querySelector('input[name="q' + i + '"]:checked'), fs = document.getElementById('jvqi-' + i);
+        if (c) { answers.push(Number(c.value)); fs.classList.remove('missing'); } else { missing.push(i + 1); fs.classList.add('missing'); }
+      });
+      var err = document.getElementById('jv-qerr'), out = document.getElementById('jv-qout');
+      if (missing.length) { err.textContent = 'Please answer every question so the score is accurate. Still to answer: ' + missing.join(', ') + '.'; out.innerHTML = ''; focusEl(document.getElementById('jvqi-' + (missing[0] - 1))); return; }
+      err.textContent = '';
+      var r = isPhq ? JE.scorePhq9(answers) : JE.scoreGad7(answers);
+      jv.scores[isPhq ? 'phq9' : 'gad7'] = r.score; if (isPhq) jv.scores.item9 = answers[8];
+      var html = '<section class="card" id="jv-score" aria-labelledby="jv-score-h"><p class="caption-3 muted" id="jv-score-h">YOUR SCORE</p><p class="heading-3 num">' + r.score + ' out of ' + r.maxScore + '</p><div class="meta caption-1"><span class="chip' + (r.severity === 'Minimal' || r.severity === 'Mild' ? '' : ' planned') + '">' + esc(r.severity) + '</span></div><p class="body-6 soft">' + esc(r.guidance) + '</p>' +
+        '<p class="caption-5 muted">Your score is kept only while this page is open, so you can choose to add it to a letter. PHQ-9 and GAD-7 were developed by Drs Spitzer, Williams and Kroenke.</p></section>';
+      if (r.safetyFlag) {
+        openSos('You said you have had thoughts of being better off dead or of hurting yourself. Please talk to someone today.', false);
+        html = '<div class="notice alert body-5">' + icon('lifebuoy') + '<span><b class="body-4">You said you have had thoughts of being better off dead or of hurting yourself. Please talk to someone today.</b>' + jvCrisisList() + '</span></div>' + html;
+      }
+      out.innerHTML = html; focusEl(document.getElementById('jv-score') || out);
+    });
+  }
+
+  /* 3. While you wait */
+  function renderWait() {
+    jvPanel.innerHTML = jvIntro('Simple things many people find helpful. They are not a treatment and do not replace support from a professional.') +
+      '<div class="grid-2">' + JE.COPING_TOOLKIT.map(function (t) {
+        return '<div class="card"><h3 class="title-2">' + esc(t.title) + '</h3><p class="body-6 soft">' + esc(t.text) + '</p>' + (t.link ? '<p class="body-6">' + jvLink(t.link[0], t.link[1]) + '</p>' : '') + '</div>';
+      }).join('') + '</div>' +
+      '<section class="block" style="padding-block:32px 0"><div class="sec-head" style="margin-bottom:16px"><h2 class="heading-5">Signs it is time to ask for help sooner</h2></div><ul class="card body-6" style="gap:8px">' +
+      JE.DETERIORATION_FLAGS.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ul><div style="margin-top:16px">' + jvNotice('warn', 'info', esc(JE.DETERIORATION_ADVICE)) + '</div></section>';
+  }
+
+  /* 4. Your choices */
+  function renderChoices() {
+    jvPanel.innerHTML = jvIntro('What you can do while you wait.') +
+      '<div class="rights">' +
+      '<div class="card" style="grid-template-columns:40px minmax(0,1fr);display:grid;gap:16px"><span class="ic">' + icon('first-aid') + '</span><div><h3 class="title-2">Refer yourself to NHS Talking Therapies</h3><p class="body-6 soft">For anxiety and depression you can refer yourself, without seeing a GP.</p></div></div>' +
+      '<div class="card" style="grid-template-columns:40px minmax(0,1fr);display:grid;gap:16px"><span class="ic">' + icon('scales') + '</span><div><h3 class="title-2">Choosing where to go</h3><p class="body-6 soft">When a GP refers you, you usually have a legal right to choose where you go for a first outpatient appointment, and you can ask to be moved to a different provider if you are likely to wait longer than the maximum waiting time. Some choices depend on what is available locally.</p></div></div>' +
+      '<div class="card" style="grid-template-columns:40px minmax(0,1fr);display:grid;gap:16px"><span class="ic">' + icon('hourglass-medium') + '</span><div><h3 class="title-2">Ask for an urgent review</h3><p class="body-6 soft">If you are getting worse while you wait, tell the service and your GP. Getting worse can change how quickly you are seen.</p></div></div></div>' +
+      '<ul class="body-6" style="display:grid;gap:8px;margin-top:16px">' + JE.CHOICE_LINKS.map(function (l) { return '<li>' + jvLink(l[0], l[1]) + '</li>'; }).join('') + '</ul>' +
+      '<section class="block" style="padding-block:32px 0"><div class="sec-head" style="margin-bottom:16px"><h2 class="heading-5">Right to Choose providers</h2></div>' +
+      jvNotice('warn', 'info', 'The providers below offer <b class="body-4">autism and ADHD assessments</b>. Right to Choose is not a way around a long wait for talking therapy. For that, refer yourself to an NHS Talking Therapies service. Ask your GP whether Right to Choose applies to you.') +
+      '<div class="grid-3" style="margin-top:16px">' + JE.RIGHT_TO_CHOOSE_PROVIDERS.map(function (p) {
+        return '<article class="card res"><h3 class="title-2"><a href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.name) + ' ' + icon('arrow-up-right', true) + '</a></h3><p class="body-6 soft">From their own page: ' + esc(p.says) + '</p><p class="caption-5 muted">Checked ' + esc(JE.RIGHT_TO_CHOOSE_CHECKED) + '. Check that they accept referrals for your area.</p></article>';
+      }).join('') + '</div></section>';
+  }
+
+  /* Letters: shared output block */
+  function scoresChoice(kind) {
+    var s = jv.scores;
+    if (s.phq9 == null && s.gad7 == null) return '<p class="caption-2 muted">You can add your PHQ-9 and GAD-7 scores to this letter if you do the Questionnaires first.</p>';
+    return '<label class="opt compact body-5" for="inc"><input type="checkbox" id="inc"' + (fval(kind, 'inc', false) ? ' checked' : '') + '><span class="dot"></span><span>Include my questionnaire scores in this letter</span></label>';
+  }
+  function letterBlock(kind, title) {
+    var L = jv.letters[kind]; if (!L) return '';
+    return '<section class="plan-box" aria-labelledby="jv-lh" style="margin-top:24px"><div><div class="note-head"><h2 class="heading-5" id="jv-lh">' + esc(title) + '</h2></div>' +
+      jvNotice('', 'info', 'Read it through and change anything that is not true for you before you send it.') +
+      '<div class="field"><label class="title-4" for="jv-letter">Your letter (you can edit it here)</label><textarea id="jv-letter" class="letter" rows="16"></textarea></div>' +
+      '<div class="copy-row"><button class="btn primary button-sm" type="button" data-jv="copy">' + icon('copy', true) + ' Copy</button>' +
+      (hostedOnClaude ? '' : '<button class="btn button-sm" type="button" data-jv="save">' + icon('download-simple', true) + ' Save as a text file</button>') + '<span class="copied caption-1" aria-live="polite"></span></div></div></section>';
+  }
+  function showLetter(kind, title) {
+    var host = document.getElementById('jv-letter-host'); host.innerHTML = letterBlock(kind, title);
+    var ta = document.getElementById('jv-letter'); if (ta) { ta.value = jv.letters[kind].text; ta.setAttribute('data-kind', kind); ta.addEventListener('input', function () { jv.letters[kind].text = ta.value; }); }
+  }
+  jvPanel.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-jv]'); if (b) {
+      var ta = document.getElementById('jv-letter'), msg = b.parentNode.querySelector('.copied'), kind = ta.getAttribute('data-kind');
+      if (b.getAttribute('data-jv') === 'copy') copyText(ta.value, msg, 'Copied');
+      else { try { var blob = new Blob([ta.value], { type: 'text/plain' }), a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = jv.letters[kind].filename; document.body.appendChild(a); a.click(); a.remove(); } catch (err) { msg.textContent = 'Download failed. Use Copy instead.'; } }
+      return;
+    }
+    var q = e.target.closest('[data-quiz]'); if (q) { jv.quiz = q.getAttribute('data-quiz'); renderQuiz(); }
+  });
+  function chosenScores(kind, form) { var f = saveForm(kind, form); return f.inc ? { phq9: jv.scores.phq9, gad7: jv.scores.gad7 } : { phq9: null, gad7: null }; }
+
+  /* 5. GP letter */
+  function renderGp() {
+    var k = 'gp';
+    jvPanel.innerHTML = jvIntro('This writes a letter from your own answers. It asks questions rather than making demands, and it adds no statistics.') +
+      '<form class="card jv-form" id="jv-gp" novalidate><div class="row2">' +
+      '<div class="field"><label class="title-4" for="name">Your name</label><input type="text" id="name" autocomplete="name" value="' + esc(fval(k, 'name', '')) + '"></div>' +
+      '<div class="field"><label class="title-4" for="surgery">Your GP surgery</label><input type="text" id="surgery" value="' + esc(fval(k, 'surgery', '')) + '"></div>' +
+      '<div class="field"><label class="title-4" for="cond">What are you struggling with?</label><select id="cond">' + optionsHtml(CONDITIONS, fval(k, 'cond', CONDITIONS[0])) + '</select></div>' +
+      '<div class="field"><label class="title-4" for="weeks">About how many weeks have you been waiting?</label><input type="number" id="weeks" min="0" max="300" inputmode="numeric" value="' + esc(fval(k, 'weeks', 8)) + '"></div></div>' +
+      '<div class="field"><label class="title-4" for="impact">How is it affecting your life? (optional)</label><input type="text" id="impact" placeholder="For example: I have been off work for two weeks." value="' + esc(fval(k, 'impact', '')) + '"></div>' +
+      '<div class="field"><label class="title-4" for="prov">Would you like to ask about a Right to Choose provider? (autism or ADHD assessment)</label><select id="prov"><option>No</option>' + optionsHtml(JE.RIGHT_TO_CHOOSE_PROVIDERS.map(function (p) { return p.name; }), fval(k, 'prov', 'No')) + '</select></div>' +
+      scoresChoice(k) + '<div class="row"><button class="btn primary button-md" type="submit">Write my letter ' + icon('arrow-right', true) + '</button></div></form><div id="jv-letter-host"></div>';
+    if (jv.letters[k]) showLetter(k, 'Your letter to your GP');
+    document.getElementById('jv-gp').addEventListener('submit', function (e) {
+      e.preventDefault(); var f = e.target, sc = chosenScores(k, f), v = jv.forms[k];
+      var text = JE.gpLetter({ patientName: v.name, gpSurgery: v.surgery, condition: v.cond, weeksWaiting: v.weeks, impact: v.impact, preferredProvider: v.prov === 'No' ? '' : v.prov, phq9: sc.phq9, gad7: sc.gad7 });
+      jv.letters[k] = { text: text, filename: 'GP_letter' + (safeName(v.name) ? '_' + safeName(v.name) : '') + '.txt' };
+      showLetter(k, 'Your letter to your GP'); focusEl(document.getElementById('jv-lh'));
+    });
+  }
+
+  /* 6. GP briefing (SBAR) */
+  function renderSbar() {
+    var k = 'sbar', durations = ['Less than a month', '1 to 3 months', '3 to 6 months', '6 to 12 months', 'More than a year'];
+    var requests = ['a referral or a faster referral to NHS Talking Therapies or a specialist team', 'advice on support while I wait', 'a review of my medication', 'a fit note', 'to talk about my choices of provider'];
+    jvPanel.innerHTML = jvIntro('GP appointments are short. This puts what you tell it into the SBAR layout (Situation, Background, Assessment, Request) that clinicians know. It only reports what you enter.') +
+      '<form class="card jv-form" id="jv-sbar" novalidate><div class="row2">' +
+      '<div class="field"><label class="title-4" for="name">Your name</label><input type="text" id="name" autocomplete="name" value="' + esc(fval(k, 'name', '')) + '"></div>' +
+      '<div class="field"><label class="title-4" for="sym">What are you struggling with?</label><input type="text" id="sym" placeholder="For example: panic attacks and poor sleep" value="' + esc(fval(k, 'sym', '')) + '"></div>' +
+      '<div class="field"><label class="title-4" for="dur">For how long?</label><select id="dur">' + optionsHtml(durations, fval(k, 'dur', durations[0])) + '</select></div>' +
+      '<div class="field"><label class="title-4" for="imp">Effect on work or daily life</label><input type="text" id="imp" value="' + esc(fval(k, 'imp', '')) + '"></div></div>' +
+      '<div class="field"><label class="title-4" for="req">What would you like from the appointment?</label><select id="req">' + optionsHtml(requests, fval(k, 'req', requests[0])) + '</select></div>' +
+      scoresChoice(k) + '<div class="row"><button class="btn primary button-md" type="submit">Write my briefing ' + icon('arrow-right', true) + '</button></div></form><div id="jv-letter-host"></div>';
+    if (jv.letters[k]) showLetter(k, 'Your briefing');
+    document.getElementById('jv-sbar').addEventListener('submit', function (e) {
+      e.preventDefault(); var sc = chosenScores(k, e.target), v = jv.forms[k];
+      var text = JE.sbarBriefing({ patientName: v.name, symptoms: v.sym, duration: v.dur, impact: v.imp, request: v.req, phq9: sc.phq9, gad7: sc.gad7, phq9Item9: sc.phq9 != null ? jv.scores.item9 : null });
+      jv.letters[k] = { text: text, filename: 'GP_briefing' + (safeName(v.name) ? '_' + safeName(v.name) : '') + '.txt' };
+      showLetter(k, 'Your briefing'); focusEl(document.getElementById('jv-lh'));
+    });
+  }
+
+  /* 7. Work and money */
+  function renderWork() {
+    jvPanel.innerHTML = jvIntro('A plain guide with links to the official pages. Amounts change, so this page does not repeat them.') +
+      '<div class="grid-2">' + JE.WORKPLACE_GUIDE.map(function (g) {
+        return '<div class="card"><h3 class="title-2">' + esc(g.title) + '</h3><p class="body-6 soft">' + esc(g.text) + '</p><ul class="body-6" style="display:grid;gap:4px">' + g.links.map(function (l) { return '<li>' + jvLink(l[0], l[1]) + '</li>'; }).join('') + '</ul></div>';
+      }).join('') + '</div>';
+  }
+
+  /* 8. Sick leave cost */
+  function renderCalc() {
+    var k = 'calc', sc = fval(k, 'scn', 'ssp');
+    jvPanel.innerHTML = jvIntro('Simple arithmetic on the numbers you enter. It does not use or invent any other data.') +
+      '<div class="card jv-form"><div class="row2">' +
+      '<div class="field"><label class="title-4" for="sal">Your gross yearly pay (£, before tax)</label><input type="number" id="sal" min="0" max="200000" step="1000" inputmode="numeric" value="' + esc(fval(k, 'sal', 30000)) + '"></div>' +
+      '<div class="field"><label class="title-4" for="scn">Your situation</label><select id="scn">' + Object.keys(JE.INCOME_SCENARIOS).map(function (key) { return '<option value="' + key + '"' + (key === sc ? ' selected' : '') + '>' + esc(JE.INCOME_SCENARIOS[key]) + '</option>'; }).join('') + '</select></div>' +
+      '<div class="field"><label class="title-4" for="wks">For how many weeks?</label><input type="number" id="wks" min="1" max="104" inputmode="numeric" value="' + esc(fval(k, 'wks', 12)) + '"></div>' +
+      '<div class="field" id="pct-field"><label class="title-4" for="pct">By how much have your hours (and pay) dropped, in per cent?</label><input type="number" id="pct" min="0" max="100" inputmode="numeric" value="' + esc(fval(k, 'pct', 20)) + '"></div></div></div>' +
+      '<div id="jv-calc-out" style="margin-top:16px;display:grid;gap:16px" aria-live="polite"></div>';
+    var box = jvPanel.querySelector('.jv-form');
+    function calc() {
+      var v = saveForm(k, box); document.getElementById('pct-field').hidden = v.scn !== 'reduced_hours';
+      var out = document.getElementById('jv-calc-out');
+      try {
+        var r = JE.estimateIncomeImpact(Number(v.sal), v.scn, Number(v.wks), v.scn === 'reduced_hours' ? Number(v.pct) : 0);
+        var money = function (n) { return '£' + n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
+        out.innerHTML = '<div class="grid-2"><div class="card metric"><p class="caption-3 muted">YOUR USUAL WEEKLY PAY</p><p class="heading-4 v">' + money(r.weeklyGross) + '</p></div><div class="card metric"><p class="caption-3 muted">ESTIMATED PAY LOST</p><p class="heading-4 v">' + money(r.totalLost) + '</p></div></div>' +
+          '<ul class="caption-2 soft" style="display:grid;gap:4px">' + r.notes.map(function (n) { return '<li>' + esc(n) + '</li>'; }).join('') + '</ul><p class="body-6">' + jvLink('GOV.UK: Statutory Sick Pay', JE.SSP.sourceUrl) + '</p>';
+      } catch (err) { out.innerHTML = jvNotice('alert', 'info', esc(err.message)); }
+    }
+    box.addEventListener('input', calc); box.addEventListener('change', calc); calc();
+  }
+
+  /* 9. MP letter */
+  function renderMp() {
+    var k = 'mp';
+    jvPanel.innerHTML = jvIntro('MPs can ask your local NHS body for waiting time information. Find your MP at <a href="https://www.writetothem.com/" target="_blank" rel="noopener">writetothem.com</a>.') +
+      '<form class="card jv-form" id="jv-mp" novalidate><div class="row2">' +
+      '<div class="field"><label class="title-4" for="name">Your name</label><input type="text" id="name" autocomplete="name" value="' + esc(fval(k, 'name', '')) + '"></div>' +
+      '<div class="field"><label class="title-4" for="mpc">Your postcode</label><input type="text" id="mpc" autocomplete="postal-code" aria-describedby="mp-pc-help" value="' + esc(fval(k, 'mpc', '')) + '"><span class="caption-2 muted" id="mp-pc-help">Your MP needs this to know you are a constituent.</span></div>' +
+      '<div class="field"><label class="title-4" for="mpn">Your MP\'s name (optional)</label><input type="text" id="mpn" value="' + esc(fval(k, 'mpn', '')) + '"></div>' +
+      '<div class="field"><label class="title-4" for="cond">What are you waiting for support with?</label><select id="cond">' + optionsHtml(CONDITIONS, fval(k, 'cond', CONDITIONS[0])) + '</select></div>' +
+      '<div class="field"><label class="title-4" for="weeks">About how many weeks have you been waiting?</label><input type="number" id="weeks" min="0" max="300" inputmode="numeric" value="' + esc(fval(k, 'weeks', 8)) + '"></div></div>' +
+      '<label class="opt compact body-5" for="look"><input type="checkbox" id="look"' + (fval(k, 'look', false) ? ' checked' : '') + '><span class="dot"></span><span>Also name my NHS area in the letter. This sends my postcode to postcodes.io (a free postcode service) to find it.</span></label>' +
+      '<p class="caption-2" id="mp-msg" aria-live="polite"></p><div class="row"><button class="btn primary button-md" type="submit">Write my letter ' + icon('arrow-right', true) + '</button></div></form><div id="jv-letter-host"></div>';
+    if (jv.letters[k]) showLetter(k, 'Your letter to your MP');
+    document.getElementById('jv-mp').addEventListener('submit', function (e) {
+      e.preventDefault(); var v = saveForm(k, e.target), msg = document.getElementById('mp-msg'); msg.textContent = '';
+      function finish(icb) {
+        var text = JE.mpLetter({ constituentName: v.name, postcode: v.mpc, mpName: v.mpn, weeksWaiting: v.weeks, condition: v.cond, icbName: icb });
+        jv.letters[k] = { text: text, filename: 'MP_letter' + (safeName(v.name) ? '_' + safeName(v.name) : '') + '.txt' };
+        showLetter(k, 'Your letter to your MP'); focusEl(document.getElementById('jv-lh'));
+      }
+      if (!v.look) { finish(null); return; }
+      msg.textContent = 'Looking up your NHS area…';
+      JE.lookupIcb(v.mpc).then(function (r) {
+        if (r.ok) { msg.textContent = ''; finish(r.icbName); }
+        else { msg.textContent = JE.LOOKUP_MESSAGES[r.reason] + ' The letter was written without it.'; finish(null); }
+      });
+    });
+  }
 
   show();
   arrivalCheck();
